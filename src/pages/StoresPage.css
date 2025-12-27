@@ -1,0 +1,94 @@
+/* StoresPage.css */
+.stores-container {
+  padding: 24px;
+  direction: rtl;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+.stores-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.stores-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #111;
+}
+
+.add-store-btn {
+  background-color: #f68910;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-store-btn:hover {
+  background-color: #e57800;
+}
+
+.stores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.store-card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.store-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.store-info {
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.store-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  border-top: 1px solid #f5f5f5;
+  padding-top: 15px;
+}
+
+.edit-btn {
+  color: #4338ca;
+  background: #eef2ff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.delete-btn {
+  color: #dc2626;
+  background: #fef2f2;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
