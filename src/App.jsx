@@ -1,0 +1,29 @@
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage'; // مطمئن شو نام فایل دقیقاً همین است
+import StockPage from './pages/StockPage';
+import StoresPage from './pages/StoresPage';
+import VerifyPage from './pages/VerifyPage';
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* وقتی سایت باز می‌شود، مستقیم به ثبت‌نام برود */}
+        <Route path="/" element={<RegisterPage />} />
+        
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/verify" element={<VerifyPage />} />
+        <Route path="/stores" element={<StoresPage />} />
+        <Route path="/stock" element={<StockPage />} />
+
+        {/* اگر آدرس اشتباه بود، برگردد به صفحه اصلی */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
