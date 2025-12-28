@@ -1,90 +1,131 @@
-/* RegisterPage.css */
 .register-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  direction: rtl;
+  height: 100vh;
+  width: 100%;
   background-color: #1a1a1a;
-  padding: 20px;
+  direction: rtl;
+  margin: 0;
 }
 
 .register-card {
   background: #fff;
-  padding: 30px 40px;
+  padding: 40px;
   border-radius: 24px;
-  width: 100%;
-  max-width: 420px;
+  width: 380px;
   text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.logo-img {
+  width: 100px;
+  margin-bottom: 20px;
 }
 
 .register-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 20px;
   color: #111;
+  margin-bottom: 30px;
 }
 
 .input-group {
   text-align: right;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .register-label {
   display: block;
   font-size: 13px;
-  margin-bottom: 6px;
-  color: #555;
-  padding-right: 5px;
+  color: #666;
+  margin-bottom: 8px;
+  font-weight: 600;
 }
 
-.register-input {
+/* بولد کردن متن داخل ورودی‌ها و کامبوباکس */
+.register-select, .register-custom-input {
   width: 100%;
-  padding: 12px 15px;
+  padding: 12px;
   border: 1px solid #eee;
   border-radius: 12px;
   outline: none;
+  font-family: inherit;
+  font-weight: bold; /* Bold */
   font-size: 15px;
+  color: #333;
+}
+
+.phone-input-container {
+  display: flex;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fff;
+  align-items: center;
+  direction: ltr;
   transition: border-color 0.3s;
 }
 
-.register-input:focus {
+.phone-input-container:focus-within {
   border-color: #f68910;
 }
 
-.register-button {
-  width: 100%;
-  padding: 16px;
-  border-radius: 12px;
+.country-code {
+  padding: 0 15px;
+  border-right: 1px solid #eee;
+  color: #111;
+  background: #f8f9fa;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold; /* Bold */
+}
+
+.phone-input {
   border: none;
+  padding: 12px;
+  width: 100%;
+  outline: none;
+  font-size: 15px;
+  font-weight: bold; /* Bold */
+  color: #333;
+}
+
+.main-button {
+  width: 100%;
+  padding: 14px;
   background-color: #f68910;
   color: #fff;
-  font-size: 16px;
+  border: none;
+  border-radius: 12px;
   font-weight: bold;
+  font-size: 16px;
   cursor: pointer;
-  margin-top: 15px;
-  transition: transform 0.2s, background-color 0.3s;
+  margin-top: 10px;
+  transition: opacity 0.3s;
 }
 
-.register-button:hover {
-  background-color: #e57800;
+.main-button:disabled {
+  opacity: 0.6;
 }
 
-.register-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+.error-text-small {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+  font-weight: bold;
 }
 
-.footer-link-text {
+.footer-text {
+  margin-top: 20px;
   font-size: 13px;
   color: #666;
-  margin-top: 20px;
 }
 
-.login-link {
+.link-text {
   color: #f68910;
   font-weight: bold;
   cursor: pointer;
-  text-decoration: none;
+  margin-right: 5px;
 }

@@ -1,86 +1,105 @@
 import './VerifyPage.css';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import api from '../api/axiosConfigs';
+import logoRazy from '../assets/RazyLogo.png';
 import { useNavigate } from 'react-router-dom';
 
 const VerifyPage = () => {
+  const [otp, setOtp] = useState(['', '', '', '']); 
+  const [timer, setTimer] = useState(116); // ۱:۵۶ مطابق تصویر
+  const inputRefs = [useRef(), useRef(), useRef(), useRef()];
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [otp, setOtp] = useState('');
-  const [timer, setTimer] = useState(120); // ۱۲۰ ثانیه معادل ۲ دقیقه
-  const phoneNumber = localStorage.getItem('tempPhone') || '';
+  
+  // خواندن شماره از حافظه که در مرحله قبل ذخیره کردیم
+  const phoneNumber = localStorage.getItem('tempPhone') || '۰۹۹۲۸۷۸۴۸۴۶';
 
-  // منطق شمارش معکوس
   useEffect(() => {
-    let interval = null;
-    if (timer > 0) {
-      interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
+    const interval = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
     return () => clearInterval(interval);
-  }, [timer]);
+  }, []);
 
-  // تبدیل ثانیه به فرمت 02:00
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    const persianSeconds = seconds < 10 ? `۰${seconds}` : seconds;
+    return `${minutes}:${persianSeconds}`;
   };
 
-  const handleSubmit = async (e) => {
+  const handleChange = (index, value) => {
+    // فقط عدد قبول کن
+    if (/[^0-9]/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value.substring(value.length - 1);
+    setOtp(newOtp);
+
+    // حرکت به باکس بعدی اگر پر شد
+    if (value && index < 3) {
+      inputRefs[index + 1].current.focus();
+    }
+  };
+
+  const handleKeyDown = (index, e) => {
+    // بازگشت به باکس قبلی با Backspace
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      inputRefs[index - 1].current.focus();
+    }
+  };
+
+const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await api.post('/b2b/Customer/VerifySignUp', { 
-        PhoneNumber: phoneNumber,
-        VerificationCode: otp 
-      });
-      if (response.data.token) localStorage.setItem('token', response.data.token);
-      navigate('/stock');
-    } catch (error) {
-      alert("کد تایید اشتباه است.");
-    } finally {
-      setLoading(false);
+    const finalOtp = otp.join('');
+
+    if (finalOtp.length === 4) {
+      console.log("کد تایید شد، انتقال به لیست فروشگاه‌ها...");
+      // تغییر مسیر به صفحه Stores
+      navigate('/stores'); 
+    } else {
+      alert("لطفاً کد تایید ۴ رقمی را کامل وارد کنید.");
     }
   };
 
   return (
     <div className="verify-container">
       <div className="verify-card">
-        <h2 className="verify-title">تایید شماره موبایل</h2>
-        <p className="verify-subtitle">کد ارسال شده به {phoneNumber} را وارد کنید</p>
+        <div className="logo-container">
+          <img src={logoRazy} alt="رازیار" className="logo-img" />
+        </div>
+        
+        <h2 className="verify-title">کد تایید یکبار مصرف</h2>
+        
+        <div className="verify-info">
+          <span>کد تایید ارسال شده به شماره <b className="phone-orange">{phoneNumber}</b> را وارد کنید.</span>
+          <span className="edit-icon" onClick={() => navigate('/login')} style={{cursor: 'pointer'}}>✏️</span>
+        </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="otp-input-container">
-            <input 
-              type="text"
-              maxLength="6"
-              className="otp-input"
-              style={{ width: '100%' }}
-              placeholder="- - - - - -"
-              onChange={(e) => setOtp(e.target.value)}
-              required
-            />
+          <div className="otp-inputs">
+            {otp.map((data, index) => (
+              <input
+                key={index}
+                type="text"
+                maxLength="1"
+                ref={inputRefs[index]}
+                value={data}
+                onInput={(e) => handleChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                className="otp-square"
+                autoComplete="off"
+              />
+            ))}
           </div>
 
-          <button type="submit" disabled={loading || timer === 0} className="verify-button">
-            {loading ? 'در حال بررسی...' : 'تایید و ورود'}
+          <button type="submit" className="verify-button">
+            تایید کد و ورود به سیستم
           </button>
         </form>
 
-        <div className="timer-section">
-          {timer > 0 ? (
-            <p className="resend-text">زمان باقی‌مانده: <span className="timer-count">{formatTime(timer)}</span></p>
-          ) : (
-            <p className="resend-text">
-              کد را دریافت نکردید؟ <span className="resend-link" onClick={() => setTimer(120)}>ارسال مجدد</span>
-            </p>
-          )}
+        <div className="resend-timer">
+           <span>{formatTime(timer)} تا درخواست مجدد کد</span>
         </div>
       </div>
     </div>

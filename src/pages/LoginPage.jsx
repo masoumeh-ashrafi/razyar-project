@@ -1,4 +1,4 @@
-import './LoginPage.css'; // استایل‌ها از اینجا خوانده می‌شوند
+import './LoginPage.css';
 
 import React, { useState } from 'react';
 
@@ -7,36 +7,46 @@ import logoRazy from '../assets/RazyLogo.png';
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const onlyNumber = (e) => {
-    if (!/[0-9]/.test(e.key)) {
-      e.preventDefault();
-    }
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const phoneRegex = /^09\d{9}$/;
-    if (!phoneRegex.test(phoneNumber)) {
-      alert("شماره موبایل نامعتبر است. باید با 09 شروع شود.");
+    setError('');
+
+    // ۱. ولیدیشن شماره موبایل
+    if (!phoneNumber) {
+      setError('لطفاً شماره موبایل خود را وارد کنید');
+      return;
+    }
+    if (!phoneNumber.startsWith('09') || phoneNumber.length !== 11) {
+      setError('شماره موبایل معتبر نیست (باید ۱۱ رقم و با ۰۹ شروع شود)');
       return;
     }
 
     setLoading(true);
+
+    /* --- بخش شبیه‌ساز (Mock) به دلیل بسته بودن پورت ۴۰۰۱ سرور --- */
+    setTimeout(() => {
+      console.log("Login Simulated for:", phoneNumber);
+      localStorage.setItem('tempPhone', phoneNumber);
+      setLoading(false);
+      navigate('/verify'); // انتقال به صفحه تایید ۴ رقمی جدید
+    }, 1500);
+
+    /* --- بخش ارسال واقعی (پس از رفع مشکل پورت سرور این را فعال کنید) ---
     try {
-      // ارسال درخواست لاگین به بک‌اندر
-      await api.post('/b2b/Customer/Login', { PhoneNumber: phoneNumber });
+      const response = await api.post('/b2b/Customer/Login', { PhoneNumber: phoneNumber });
       localStorage.setItem('tempPhone', phoneNumber);
       navigate('/verify');
-    } catch (error) {
-      console.error("Login Error:", error.response?.data || error.message);
-      alert("خطا در ورود. لطفاً دوباره تلاش کنید.");
+    } catch (err) {
+      setError(err.response?.data?.Message || 'خطا در برقراری ارتباط با سرور');
     } finally {
       setLoading(false);
     }
+    -------------------------------------------------------------- */
   };
 
   return (
@@ -45,33 +55,40 @@ const LoginPage = () => {
         <div className="logo-container">
           <img src={logoRazy} alt="رازیار" className="logo-img" />
         </div>
+        
+        <h2 className="login-title">ورود به رازیار</h2>
+        <p className="login-subtitle">جهت ورود به پنل، شماره همراه خود را وارد کنید</p>
 
-        <h2 className="login-title">ورود به حساب</h2>
-
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <div className="input-group">
-            <label className="login-label">شماره موبایل</label>
+            <label className="login-label">شماره همراه</label>
             <div className="phone-input-container">
               <div className="country-code">+۹۸</div>
               <input 
                 type="text" 
                 maxLength="11"
-                placeholder="09123456789" 
                 className="phone-input"
-                onKeyPress={onlyNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                required
+                placeholder="09123456789"
+                value={phoneNumber}
+                onInput={(e) => {
+                  // جلوگیری از تایپ حروف - فقط عدد
+                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                  setPhoneNumber(e.target.value);
+                }}
               />
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="main-button">
-            {loading ? 'در حال ارسال...' : 'ارسال کد ورود'}
+          {error && <p className="error-text-small">{error}</p>}
+
+          <button type="submit" className="main-button" disabled={loading}>
+            {loading ? 'در حال ارسال...' : 'ارسال کد تایید'}
           </button>
         </form>
 
         <p className="footer-text">
-          حساب کاربری ندارید؟ <span className="link-text" onClick={() => navigate('/register')}>ثبت‌نام کنید</span>
+          هنوز ثبت‌نام نکرده‌اید؟ 
+          <span onClick={() => navigate('/register')} className="link-text"> ثبت‌نام</span>
         </p>
       </div>
     </div>

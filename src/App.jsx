@@ -1,25 +1,30 @@
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage'; // مطمئن شو نام فایل دقیقاً همین است
+import RegisterPage from './pages/RegisterPage';
 import StockPage from './pages/StockPage';
-import StoresPage from './pages/StoresPage';
+import StoresPage from './pages/FinalDashboard';
 import VerifyPage from './pages/VerifyPage';
+
+// وارد کردن فایل جدید که با هم ساختیم
+
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* وقتی سایت باز می‌شود، مستقیم به ثبت‌نام برود */}
+        {/* صفحه اصلی روی ثبت نام */}
         <Route path="/" element={<RegisterPage />} />
+        
+        {/* این همان صفحه‌ای است که چیدمانش را اصلاح کردیم */}
+        <Route path="/stores" element={<StoresPage />} />
         
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/verify" element={<VerifyPage />} />
-        <Route path="/stores" element={<StoresPage />} />
         <Route path="/stock" element={<StockPage />} />
 
-        {/* اگر آدرس اشتباه بود، برگردد به صفحه اصلی */}
+        {/* هدایت آدرس‌های اشتباه */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

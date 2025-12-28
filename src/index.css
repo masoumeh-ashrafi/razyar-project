@@ -1,39 +1,19 @@
-/* اضافه کردن فونت فارسی وزیر */
-@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
-
-:root {
-  --primary-orange: #ff8a00; /* رنگ نارنجی دقیق فیگما */
-  --bg-gray: #f8f9fa;
-  --text-dark: #333;
-}
-
+/* index.css */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Vazir', sans-serif !important; /* اعمال فونت به کل پروژه */
-  direction: rtl; /* راست‌چین کردن کل پروژه */
 }
 
 body {
-  background-color: var(--bg-gray);
-  color: var(--text-dark);
-  line-height: 1.6;
+  font-family: 'Vazir', Tahoma, sans-serif;
+  background-color: #F8FAFC;
+  direction: rtl;
+  overflow-x: hidden;
 }
 
-/* استایل عمومی برای دکمه‌های نارنجی فیگما */
-.main-button {
-  background-color: var(--primary-orange);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.main-button:hover {
-  background-color: #e67e00;
-  transform: translateY(-2px);
+/* حذف محدودیت‌هایی که در App.css قبلی بود */
+#root {
+  width: 100%;
+  min-height: 100vh;
 }
