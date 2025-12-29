@@ -1,5 +1,15 @@
 import './StoresPage.css';
 
+import {
+  Bell,
+  ChevronDown,
+  ChevronLeft,
+  Info,
+  MessageCircle,
+  Search,
+  Settings,
+  Users
+} from 'lucide-react';
 import React, { useState } from 'react';
 
 import logoRazy from '../assets/RazyLogo.png';
@@ -7,22 +17,21 @@ import { useNavigate } from 'react-router-dom';
 
 const StoresPage = () => {
   const navigate = useNavigate();
-  // منطق سرچ
   const [searchTerm, setSearchTerm] = useState('');
   
   const allStores = [
     { id: 1, name: 'مانتو جردن', phone: '۰۹۹۲ ۸۷۸ ۴۸۴۶' },
-    { id: 2, name: 'مانتو جردن', phone: '۰۹۹۲ ۸۷۸ ۴۸۴۶' },
-    { id: 3, name: 'مانتو جردن', phone: '۰۹۹۲ ۸۷۸ ۴۸۴۶' },
+    { id: 2, name: 'بوتیک ونک', phone: '۰۹۱۲ ۳۴۵ ۶۷۸۹' },
+    { id: 3, name: 'گالری سارینا', phone: '۰۹۳۵ ۷۸۹ ۱۲۳۴' },
   ];
 
   const filteredStores = allStores.filter(store => 
-    store.name.includes(searchTerm)
+    store.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="dashboard-wrapper">
-      {/* سایدبار سمت راست - حالا در اولین لایه برای رعایت ترتیب RTL */}
+      {/* سایدبار سمت راست */}
       <aside className="right-sidebar">
         <div className="sidebar-content">
           <div className="logo-section">
@@ -31,54 +40,61 @@ const StoresPage = () => {
 
           <div className="sidebar-search">
             <span className="cmd-key">⌘ F</span>
-            <input type="text" placeholder="جستجو" />
-            <span>🔍</span>
+            <input 
+              type="text" 
+              placeholder="جستجو" 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Search size={18} color="#9ca3af" />
           </div>
 
           <nav className="side-menu">
             <div className="menu-group active">
               <div className="menu-item active">
-                <span>▼</span>
+                <ChevronDown size={16} />
                 <span>مشتریان من</span>
-                <span>👥</span>
+                <Users size={20} />
               </div>
               <div className="sub-menu-item">
                 <span className="blue-dot-active"></span>
                 فروشگاه‌ها
               </div>
             </div>
+            
             <div className="menu-item">
-              <span></span>
+              <span style={{width: '16px'}}></span>
               <span>تنظیمات</span>
-              <span>⚙️</span>
+              <Settings size={20} />
             </div>
 
-            {/* بخش پشتیبانی و پروفایل دقیقاً زیر تنظیمات */}
             <div className="sidebar-bottom-sections">
               <div className="support-card">
-                <span className="arrow-left-gray">◀</span>
+                <ChevronLeft size={16} color="#9ca3af" />
                 <div className="support-info">
                   <span className="s-title">پشتیبانی</span>
                   <span className="s-desc">هر سوالی داری بپرس!</span>
                 </div>
-                <div className="orange-box">💬</div>
+                <div className="orange-box">
+                  <MessageCircle size={18} color="white" />
+                </div>
               </div>
 
               <div className="profile-combo">
-                <span className="gray-arrow">▼</span>
+                <ChevronDown size={16} color="#9ca3af" />
                 <div className="combo-info">
                   <span className="c-name">پوشاک سارا</span>
                   <span className="c-role">تامین کننده</span>
                 </div>
-                <img src="https://i.pravatar.cc/100?u=shop" alt="shop" />
+                <img src="https://i.pravatar.cc/100?u=shop" alt="shop" className="profile-img" />
               </div>
             </div>
           </nav>
         </div>
       </aside>
 
+      {/* محتوای اصلی */}
       <div className="main-layout-container">
-        {/* هدر بالا */}
         <header className="top-nav">
           <div className="top-nav-right">
             <div className="breadcrumb">
@@ -90,14 +106,19 @@ const StoresPage = () => {
           <div className="top-nav-center">
             <div className="search-pill">
               <span className="cmd-hint">⌘ F</span>
-              <input type="text" placeholder="جست و جو" />
-              <span className="search-icon">🔍</span>
+              <input 
+                type="text" 
+                placeholder="جست و جو" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <Search size={18} color="#9ca3af" />
             </div>
           </div>
 
           <div className="top-nav-left">
             <div className="user-profile-header">
-              <span className="gray-arrow">▼</span>
+              <ChevronDown size={16} color="#9ca3af" />
               <div className="user-info">
                 <span className="user-name">سارا محمدی</span>
                 <span className="user-phone">۰۹۹۲۸۷۸۴۸۴۶</span>
@@ -106,39 +127,40 @@ const StoresPage = () => {
                 <img src="https://i.pravatar.cc/100?u=sara" alt="avatar" />
                 <div className="status-dot"></div>
               </div>
-              <span className="header-icon">🔔</span>
+              <Bell size={20} color="#4b5563" className="header-icon" />
             </div>
           </div>
         </header>
 
-        {/* محتوای اصلی (جدول) */}
         <main className="main-content">
           <div className="alert-box">
-            <div className="info-icon">!</div>
+            <div className="info-icon-container">
+              <Info size={16} color="white" />
+            </div>
             <span>یه پیام طولانی قابل استفاده برای اعلان اطلاعیه در داشبورد</span>
           </div>
 
           <div className="table-card">
             <div className="table-header">
               <div className="table-title">
-                <span className="orange-text">👥</span>
+                <Users size={20} color="#f97316" />
                 <span>لیست مشتریان من</span>
               </div>
-              <div className="table-search">
+              <div className="table-search-box">
                 <input 
                   type="text" 
                   placeholder="جستجو" 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <span>🔍</span>
+                <Search size={18} color="#9ca3af" />
               </div>
             </div>
 
             <table className="data-table">
               <thead>
                 <tr>
-                  <th><input type="checkbox" /></th>
+                  <th><input type="checkbox" className="custom-checkbox" /></th>
                   <th>نام فروشگاه‌ها</th>
                   <th>شماره تماس</th>
                   <th>عملیات</th>

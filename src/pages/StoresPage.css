@@ -1,84 +1,296 @@
-.dashboard-wrapper {
-  display: flex !important;
-  flex-direction: row-reverse !important; /* جابجایی سایدبار به راست */
-  direction: rtl !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background-color: #fff !important;
-  margin: 0 !important;
-  padding: 0 !important;
+/* تنظیمات پایه */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Tahoma', sans-serif;
 }
 
+.dashboard-wrapper {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  direction: rtl !important;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f8fafc;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.right-sidebar {
+  width: 280px;
+  background: white;
+  border-left: 1px solid #e2e8f0;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+}
+
+.sidebar-logo {
+  max-width: 120px;
+  margin: 0 auto 32px;
+  display: block;
+}
+
+.sidebar-search {
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.sidebar-search input {
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+}
+
+.cmd-key {
+  font-size: 12px;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: white;
+}
+
+.side-menu {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+
+.menu-item.active {
+  background: #fff7ed;
+  color: #f97316;
+}
+
+.sub-menu-item {
+  padding: 10px 40px;
+  color: #f97316;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.blue-dot-active {
+  width: 6px;
+  height: 6px;
+  background: #3b82f6;
+  border-radius: 50%;
+}
+
+.sidebar-bottom-sections {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.support-card {
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.orange-box {
+  background: #f97316;
+  padding: 8px;
+  border-radius: 10px;
+}
+
+.profile-combo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+}
+
+.profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* Main Content */
 .main-layout-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* اسکرول فقط برای محتوا */
+  overflow-y: auto;
 }
 
-
-/* Sidebar Fixes */
-.right-sidebar {
-  width: 280px;
-  border-left: 1px solid #f0f0f0;
-  padding: 20px;
+.top-nav {
+  height: 80px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
   display: flex;
-  flex-direction: column;
-}
-
-.sidebar-bottom-sections {
-  margin-top: 30px; /* فاصله کم زیر تنظیمات */
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Table Column Reversal */
-.data-table th, .data-table td {
-  text-align: right; /* متن‌ها راست‌چین */
-  padding: 15px 20px;
-}
-
-.data-table th:last-child, .data-table td:last-child {
-  text-align: left; /* دکمه عملیات در سمت چپ قرار گیرد */
-}
-
-/* Search Logic Styling */
-.table-header {
-  flex-direction: row; /* عنوان راست، سرچ چپ */
+  align-items: center;
   justify-content: space-between;
+  padding: 0 32px;
 }
 
-.clickable-row {
-  cursor: pointer;
-  transition: background 0.2s;
+.search-pill {
+  background: #f1f5f9;
+  padding: 10px 20px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 350px;
+}
+
+.search-pill input {
+  background: transparent;
+  border: none;
+  outline: none;
+  flex: 1;
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar-container {
+  position: relative;
+}
+
+.avatar-container img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  background: #22c55e;
+  border: 2px solid white;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+}
+
+.main-content {
+  padding: 32px;
+}
+
+.alert-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: #64748b;
+}
+
+.info-icon-container {
+  background: #3b82f6;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.table-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.table-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  gap: 8px;
+}
+
+.table-search-box input {
+  border: none;
+  outline: none;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  text-align: right;
+  padding: 16px;
+  color: #94a3b8;
+  font-weight: 500;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.data-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .clickable-row:hover {
-  background-color: #f8f9fa;
+  background-color: #f8fafc;
+  cursor: pointer;
 }
 
-/* Logo Alignment */
-.logo-section {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-.data-table {
-  width: 100%;
-  direction: rtl; /* اطمینان از راست به چپ بودن جدول */
+.details-btn {
+  background: #f1f5f9;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #475569;
+  cursor: pointer;
 }
 
-.data-table th, .data-table td {
-  text-align: right;
-  padding: 15px;
-}
-.data-table th:last-child, .data-table td:last-child {
-  text-align: left;
-}
-.sidebar-bottom-sections {
-  margin-top: 20px !important; /* حذف فاصله زیاد و چسباندن به منوی بالا */
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.details-btn:hover {
+  background: #e2e8f0;
 }
