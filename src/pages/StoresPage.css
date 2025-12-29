@@ -1,4 +1,4 @@
-.dashboard-wrapper {
+.dashboard-wrapper-new {
   display: flex !important; /* اجبار به استفاده از فلکس */
   flex-direction: row-reverse !important; /* اجبار سایدبار به سمت راست */
   direction: rtl;
