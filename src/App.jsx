@@ -1,6 +1,7 @@
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import LoginPage from './pages/LoginPage';
+import PasswordPage from './pages/PasswordPage';
 import RegisterPage from './pages/RegisterPage';
 import StockPage from './pages/StockPage';
 import StoresPage from './pages/StoresPage';
@@ -22,6 +23,10 @@ function App() {
 
         {/* هدایت آدرس‌های اشتباه */}
         <Route path="*" element={<Navigate to="/" />} />
+
+<Route path="/verify" element={<PasswordPage />} />
+
+        
       </Routes>
     </Router>
   );
