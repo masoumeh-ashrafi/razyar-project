@@ -1,11 +1,12 @@
-.dashboard-wrapper-new {
-  display: flex !important; /* اجبار به استفاده از فلکس */
-  flex-direction: row-reverse !important; /* اجبار سایدبار به سمت راست */
-  direction: rtl;
-  width: 100%;
-  height: 100vh;
-  background-color: #fff;
-  overflow: hidden;
+.dashboard-wrapper {
+  display: flex !important;
+  flex-direction: row-reverse !important; /* جابجایی سایدبار به راست */
+  direction: rtl !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: #fff !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .main-layout-container {

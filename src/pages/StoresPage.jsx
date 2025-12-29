@@ -21,7 +21,7 @@ const StoresPage = () => {
   );
 
   return (
-    <div className="dashboard-wrapper-new">
+    <div className="dashboard-wrapper">
       {/* سایدبار سمت راست - حالا در اولین لایه برای رعایت ترتیب RTL */}
       <aside className="right-sidebar">
         <div className="sidebar-content">

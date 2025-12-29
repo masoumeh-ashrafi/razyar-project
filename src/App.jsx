@@ -3,11 +3,8 @@ import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-d
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import StockPage from './pages/StockPage';
-import StoresPage from './pages/FinalDashboard';
+import StoresPage from './pages/StoresPage';
 import VerifyPage from './pages/VerifyPage';
-
-// وارد کردن فایل جدید که با هم ساختیم
-
 
 function App() {
   return (
