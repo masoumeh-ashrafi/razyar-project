@@ -1,78 +1,63 @@
 .dashboard-wrapper {
   height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse; /* سایدبار به راست منتقل شد */
   background-color: #fff;
   font-family: 'Tahoma', sans-serif;
   overflow: hidden;
+  direction: rtl; /* کل صفحه راست‌چین شد */
 }
 
-/* Header Styles */
-.top-nav {
-  height: 70px;
-  border-bottom: 1px solid #f0f0f0;
+.main-layout-container {
+  flex: 1;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px;
-  direction: ltr;
+  flex-direction: column;
 }
 
-.user-profile-header { display: flex; align-items: center; gap: 15px; direction: rtl; }
-.avatar-container { position: relative; }
-.avatar-container img { width: 40px; height: 40px; border-radius: 12px; }
-.status-dot { position: absolute; bottom: 0; right: 0; width: 8px; height: 8px; background: #2ecc71; border: 2px solid #fff; border-radius: 50%; }
-.user-info .user-name { font-weight: bold; font-size: 14px; display: block; }
-.user-info .user-phone { font-size: 11px; color: #999; }
+/* Sidebar Fixes */
+.right-sidebar {
+  width: 280px;
+  border-left: 1px solid #f0f0f0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
 
-.search-pill { background: #f9f9f9; border-radius: 10px; width: 350px; display: flex; align-items: center; padding: 8px 15px; direction: rtl; }
-.search-pill input { border: none; background: transparent; flex: 1; outline: none; padding: 0 10px; text-align: right; }
-.cmd-hint { color: #ccc; font-size: 11px; border: 1px solid #eee; padding: 2px 4px; border-radius: 4px; }
+.sidebar-bottom-sections {
+  margin-top: 30px; /* فاصله کم زیر تنظیمات */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-.breadcrumb { text-align: right; direction: rtl; }
-.breadcrumb h1 { margin: 0; font-size: 18px; }
-.breadcrumb p { margin: 0; font-size: 11px; color: #aaa; }
-.blue-text { color: #3498db; }
+/* Table Column Reversal */
+.data-table th, .data-table td {
+  text-align: right; /* متن‌ها راست‌چین */
+  padding: 15px 20px;
+}
 
-/* Main Layout */
-.main-layout { display: flex; flex: 1; overflow: hidden; }
+.data-table th:last-child, .data-table td:last-child {
+  text-align: left; /* دکمه عملیات در سمت چپ قرار گیرد */
+}
 
-/* Right Sidebar */
-.right-sidebar { width: 260px; border-left: 1px solid #f0f0f0; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; direction: rtl; }
-.sidebar-logo { width: 40px; margin-bottom: 25px; }
-.sidebar-search { background: #f9f9f9; border-radius: 8px; display: flex; align-items: center; padding: 8px 12px; margin-bottom: 20px; }
-.sidebar-search input { border: none; background: transparent; width: 100%; font-size: 12px; outline: none; }
-.cmd-key { font-size: 10px; color: #ccc; margin-left: 5px; }
+/* Search Logic Styling */
+.table-header {
+  flex-direction: row; /* عنوان راست، سرچ چپ */
+  justify-content: space-between;
+}
 
-.menu-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; color: #666; font-size: 14px; cursor: pointer; }
-.menu-item.active { color: #000; font-weight: bold; }
-.sub-menu-item { padding: 8px 30px 8px 0; color: #3498db; font-size: 13px; display: flex; align-items: center; gap: 8px; font-weight: bold; }
-.dot { width: 6px; height: 6px; background: #3498db; border-radius: 50%; }
+.clickable-row {
+  cursor: pointer;
+  transition: background 0.2s;
+}
 
-/* Main Content Area */
-.main-content { flex: 1; padding: 30px 50px; direction: rtl; overflow-y: auto; background: #fff; }
-.alert-box { background: #f0f7ff; border: 1px solid #339af0; color: #004085; padding: 12px 20px; border-radius: 8px; font-size: 13px; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
-.info-icon { background: #339af0; color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.clickable-row:hover {
+  background-color: #f8f9fa;
+}
 
-.table-card { border: 1px solid #f0f0f0; border-radius: 16px; overflow: hidden; }
-.table-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-.table-search { border: 1px solid #eee; border-radius: 8px; padding: 5px 12px; display: flex; align-items: center; }
-.table-search input { border: none; outline: none; font-size: 12px; }
-.orange-text { color: #f39c12; }
-
-.data-table { width: 100%; border-collapse: collapse; }
-.data-table th { padding: 15px; background: #fafafa; color: #aaa; font-size: 11px; text-align: center; }
-.data-table td { padding: 20px; border-bottom: 1px solid #f9f9f9; text-align: center; font-size: 13px; }
-.details-btn { border: 1px solid #eee; background: #fff; padding: 6px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; }
-.phone-cell { font-weight: bold; }
-
-/* Sidebar Bottom Profiles */
-.support-card { border: 1px solid #eee; border-radius: 12px; padding: 10px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
-.support-icon-orange { background: #f39c12; padding: 6px; border-radius: 8px; display: flex; }
-.s-title { font-weight: bold; font-size: 13px; display: block; }
-.s-desc { font-size: 11px; color: #aaa; }
-
-.profile-combo { border: 1px solid #eee; border-radius: 12px; padding: 8px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-.profile-combo img { width: 38px; height: 38px; border-radius: 8px; }
-.c-name { font-weight: bold; font-size: 13px; display: block; }
-.c-role { font-size: 11px; color: #aaa; }
+/* Logo Alignment */
+.logo-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}

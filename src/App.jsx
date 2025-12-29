@@ -16,7 +16,6 @@ function App() {
         {/* صفحه اصلی روی ثبت نام */}
         <Route path="/" element={<RegisterPage />} />
         
-        {/* این همان صفحه‌ای است که چیدمانش را اصلاح کردیم */}
         <Route path="/stores" element={<StoresPage />} />
         
         <Route path="/register" element={<RegisterPage />} />

@@ -36,7 +36,7 @@ const LoginPage = () => {
       navigate('/verify'); // انتقال به صفحه تایید ۴ رقمی جدید
     }, 1500);
 
-    /* --- بخش ارسال واقعی (پس از رفع مشکل پورت سرور این را فعال کنید) ---
+    /* --- بخش ارسال واقعی (پس از رفع مشکل پورت سرور این را فعال می کنیم) ---
     try {
       const response = await api.post('/b2b/Customer/Login', { PhoneNumber: phoneNumber });
       localStorage.setItem('tempPhone', phoneNumber);
