@@ -14,7 +14,7 @@ const PasswordPage = () => {
     e.preventDefault();
     setIsLoading(true); // شروع لودینگ
 
-    // شبیه‌سازی اتصال به سرور (مثلاً ۱.۵ ثانیه زمان می‌برد)
+    // شبیه‌سازی اتصال به
     setTimeout(() => {
       if (password) {
         setIsLoading(false); // اتمام لودینگ
