@@ -3,12 +3,7 @@ import './StoresPage.css';
 import {
   Bell,
   ChevronDown,
-  ChevronLeft,
-  Info,
-  MessageCircle,
   Search,
-  Settings,
-  Store,
   Users
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -20,14 +15,12 @@ const StoresPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   
-  // ۱. استیت پروفایل که در ابتدا خالی است
   const [userData, setUserData] = useState({ 
     FullName: '', 
     Mobile: '', 
     Avatar: '' 
   });
 
-  // ۲. دریافت دیتای زنده از حافظه مرورگر
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
@@ -54,7 +47,6 @@ const StoresPage = () => {
     store.name.includes(searchTerm)
   );
 
-  // تابع کمکی برای زمانی که عکس کاربر وجود ندارد
   const getAvatar = () => {
     return userData.Avatar || `https://ui-avatars.com/api/?name=${userData.FullName}&background=random`;
   };
@@ -68,28 +60,17 @@ const StoresPage = () => {
           <div className="top-nav-right">
             <div className="breadcrumb">
               <h1>داشبورد</h1>
-              <p>پیشخوان / <span className="blue-text">عمده فروشان</span></p>
+              {/* متن زیر داشبورد طبق درخواست حذف شد */}
             </div>
           </div>
 
-          <div className="top-nav-center">
-            <div className="search-pill">
-              <span className="cmd-hint">⌘ F</span>
-              <input 
-                type="text" 
-                placeholder="جست و جو" 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <Search size={18} color="#9ca3af" />
-            </div>
-          </div>
+          {/* باکس جستجوی وسط هدر طبق درخواست حذف شد */}
+          <div className="top-nav-center"></div>
 
           <div className="top-nav-left">
             <div className="user-profile-header">
               <ChevronDown size={16} color="#9ca3af" />
               <div className="user-info">
-                {/* نام و شماره واقعی از localStorage */}
                 <span className="user-name">{userData.FullName}</span>
                 <span className="user-phone">{userData.Mobile}</span>
               </div>
@@ -103,12 +84,7 @@ const StoresPage = () => {
         </header>
 
         <main className="main-content">
-          <div className="alert-box" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '15px', backgroundColor: '#eff6ff', borderRadius: '12px', color: '#3b82f6', marginBottom: '20px', borderRight: '5px solid #3b82f6' }}>
-            <div className="info-icon-container" style={{ backgroundColor: '#3b82f6', borderRadius: '50%', padding: '4px', display: 'flex' }}>
-              <Info size={16} color="white" />
-            </div>
-            <span style={{ fontWeight: '500' }}>یه پیام طولانی قابل استفاده برای اعلان اطلاعیه در داشبورد</span>
-          </div>
+          {/* باکس پیام آبی رنگ طبق درخواست حذف شد */}
 
           <div className="table-card">
             <div className="table-header">
@@ -154,61 +130,26 @@ const StoresPage = () => {
       {/* سایدبار (سمت راست) */}
       <aside className="right-sidebar" style={{ width: '280px', flexShrink: 0 }}>
         <div className="sidebar-content">
-          <div className="logo-section">
+          <div className="logo-section" style={{ marginBottom: '40px' }}>
             <img src={logoRazy} alt="logo" className="sidebar-logo" />
           </div>
 
-          <div className="sidebar-search">
-            <span className="cmd-key">⌘ F</span>
-            <input 
-              type="text" 
-              placeholder="جستجو" 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <Search size={18} color="#9ca3af" />
-          </div>
+          {/* جستجوی سایدبار طبق درخواست حذف شد */}
 
           <nav className="side-menu">
             <div className="menu-group active">
               <div className="menu-item active">
+                {/* Chevron حذف نشد تا استایل حفظ شود، اما زیرمنوها حذف شدند */}
                 <ChevronDown size={16} />
                 <span>مشتریان من</span>
                 <Users size={20} />
               </div>
-              <div className="sub-menu-item">
-                <span className="blue-dot-active"></span>
-                فروشگاه‌ها
-              </div>
             </div>
             
-            <div className="menu-item" onClick={() => navigate('/stock')}>
-               <span style={{width: '16px'}}></span>
-               <span>انبار من</span>
-               <Store size={20} />
-            </div>
+            {/* گزینه‌های انبار من و فروشگاه‌ها طبق درخواست حذف شدند */}
 
             <div className="sidebar-bottom-sections" style={{ marginTop: 'auto' }}>
-              <div className="support-card">
-                <ChevronLeft size={16} color="#9ca3af" />
-                <div className="support-info">
-                  <span className="s-title">پشتیبانی</span>
-                  <span className="s-desc">هر سوالی داری بپرس!</span>
-                </div>
-                <div className="orange-box">
-                  <MessageCircle size={18} color="white" />
-                </div>
-              </div>
-
-              <div className="profile-combo">
-                <ChevronDown size={16} color="#9ca3af" />
-                <div className="combo-info">
-                  {/* نام واقعی در سایدبار */}
-                  <span className="c-name">{userData.FullName}</span>
-                  <span className="c-role">تامین کننده</span>
-                </div>
-                <img src={getAvatar()} alt="shop" className="profile-img" />
-              </div>
+              {/* بخش پشتیبانی و پروفایل پایین سایدبار طبق درخواست حذف شدند */}
             </div>
           </nav>
         </div>
