@@ -1,60 +1,36 @@
-import './PasswordPage.css';
-
 import React, { useState } from 'react';
 
-import logoRazy from '../assets/RazyLogo.png';
 import { useNavigate } from 'react-router-dom';
 
 const PasswordPage = () => {
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // وضعیت لودینگ
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handlePasswordSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true); // شروع لودینگ
-
-    // شبیه‌سازی اتصال به سرور 
+    setIsLoading(true);
     setTimeout(() => {
-      if (password) {
-        setIsLoading(false); // اتمام لودینگ
+        setIsLoading(false);
         navigate('/stores');
-      }
-    }, 1500);
+    }, 600);
   };
 
   return (
-    <div className="password-screen">
-      <div className="auth-card">
-        <div className="brand-logo">
-          <img src={logoRazy} alt="Razy Afzar" />
-        </div>
-        
-        <h2 className="auth-title">رمز عبور را وارد کنید</h2>
-        
-        <form onSubmit={handleLogin}>
-          <div className="field-group">
-            <label>رمز عبور</label>
-            <input
-              type="password"
-              placeholder="@swgrhdgnfdb56432@"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="password-field"
-              required
-              disabled={isLoading} // غیرفعال کردن ورودی هنگام لودینگ
-            />
-          </div>
-          
-          <button 
-            type="submit" 
-            className={`login-action-btn ${isLoading ? 'loading' : ''}`}
-            disabled={isLoading}
-          >
-            {isLoading ? <div className="spinner"></div> : 'ورود به سیستم'}
-          </button>
-        </form>
-      </div>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', direction: 'rtl', backgroundColor: '#f8fafc' }}>
+      <form onSubmit={handlePasswordSubmit} style={{ padding: '40px', backgroundColor: '#fff', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', textAlign: 'center', width: '350px' }}>
+        <h2 style={{ marginBottom: '20px' }}>ورود</h2>
+        <input 
+          type="password" 
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="رمز عبور"
+          style={{ width: '100%', padding: '12px', marginBottom: '20px', borderRadius: '10px', border: '1px solid #ddd', textAlign: 'center' }}
+        />
+        <button type="submit" style={{ width: '100%', padding: '12px', backgroundColor: '#f97316', color: '#fff', border: 'none', borderRadius: '10px', cursor: 'pointer' }}>
+          {isLoading ? 'در حال ورود...' : 'تایید'}
+        </button>
+      </form>
     </div>
   );
 };

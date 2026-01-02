@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://mws.razysoft.com:4001/api',
+  baseURL: 'https://mws.razysoft.com/api',
 });
 
 // این بخش حیاتی است: چسباندن توکن به تمام درخواست‌ها

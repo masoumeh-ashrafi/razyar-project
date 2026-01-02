@@ -45,18 +45,18 @@ const RegisterPage = () => {
     setLoading(true);
 
     /* --- بخش شبیه‌ساز (چون فعلا پورت سرور ۴۰۰۱ بسته است) --- */
-    setTimeout(() => {
-      console.log("Registration Simulated for:", formData.PhoneNumber);
-      localStorage.setItem('tempPhone', formData.PhoneNumber);
-      setLoading(false);
-      navigate('/verify'); 
-    }, 1500);
+    // setTimeout(() => {
+    //   console.log("Registration Simulated for:", formData.PhoneNumber);
+    //   localStorage.setItem('tempPhone', formData.PhoneNumber);
+    //   setLoading(false);
+    //   navigate('/verify'); 
+    // }, 1500);
 
-    /* --- بخش ارسال واقعی (بعد از باز شدن پورت سرور، این را از کامنت خارج کن) ---
+   // --- بخش ارسال واقعی (بعد از باز شدن پورت سرور، این را از کامنت خارج کن) ---
     try {
       const payload = {
         NationalCode: formData.NationalCode,
-        PhoneNumber: formData.PhoneNumber,
+        PhoneNumber: "0" + formData.PhoneNumber,
         Type: formData.ActivityType === 'seller' ? 1 : 2
       };
       await api.post('/b2b/Customer/SignUp', payload);
@@ -67,7 +67,6 @@ const RegisterPage = () => {
     } finally {
       setLoading(false);
     }
-    ---------------------------------------------------------- */
   };
 
   return (
