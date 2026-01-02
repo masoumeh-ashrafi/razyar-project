@@ -28,17 +28,16 @@ const LoginPage = () => {
 
     setLoading(true);
 
-    /* --- بخش شبیه‌ساز (Mock) به دلیل بسته بودن پورت ۴۰۰۱ سرور --- */
-    setTimeout(() => {
-      console.log("Login Simulated for:", phoneNumber);
-      localStorage.setItem('tempPhone', phoneNumber);
-      setLoading(false);
-      navigate('/verify'); // انتقال به صفحه تایید ۴ رقمی جدید
-    }, 1500);
-
-    /* --- بخش ارسال واقعی (پس از رفع مشکل پورت سرور این را فعال می کنیم) ---
+    // /* --- بخش شبیه‌ساز (Mock) به دلیل بسته بودن پورت ۴۰۰۱ سرور --- */
+    // setTimeout(() => {
+    //   console.log("Login Simulated for:", phoneNumber);
+    //   localStorage.setItem('tempPhone', phoneNumber);
+    //   setLoading(false);
+    //   navigate('/verify'); // انتقال به صفحه تایید ۴ رقمی جدید
+    // }, 1500);
+//--- بخش ارسال واقعی (پس از رفع مشکل پورت سرور این را فعال می کنیم) ---
     try {
-      const response = await api.post('/b2b/Customer/Login', { PhoneNumber: phoneNumber });
+      const response = await api.post('/b2b/Customer/SignIn', { PhoneNumber: phoneNumber });
       localStorage.setItem('tempPhone', phoneNumber);
       navigate('/verify');
     } catch (err) {
@@ -46,17 +45,17 @@ const LoginPage = () => {
     } finally {
       setLoading(false);
     }
-    -------------------------------------------------------------- */
+   // -------------------------------------------------------------- */
   };
 
   return (
     <div className="login-container">
       <div className="login-card">
         <div className="logo-container">
-          <img src={logoRazy} alt="رازیار" className="logo-img" />
+          <img src={logoRazy} alt="رازی" className="logo-img" />
         </div>
         
-        <h2 className="login-title">ورود به رازیار</h2>
+        <h2 className="login-title">ورود</h2>
         <p className="login-subtitle">جهت ورود به پنل، شماره همراه خود را وارد کنید</p>
 
         <form onSubmit={handleLogin}>
@@ -68,7 +67,7 @@ const LoginPage = () => {
                 type="text" 
                 maxLength="11"
                 className="phone-input"
-                placeholder="09123456789"
+                placeholder="09121111111"
                 value={phoneNumber}
                 onInput={(e) => {
                   // جلوگیری از تایپ حروف - فقط عدد

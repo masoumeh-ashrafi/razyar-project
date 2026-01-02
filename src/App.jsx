@@ -11,22 +11,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* صفحه اصلی روی ثبت نام */}
         <Route path="/" element={<RegisterPage />} />
-        
-        <Route path="/stores" element={<StoresPage />} />
-        <Route path="/stores" element={<StoresPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/verify" element={<VerifyPage />} />
+        <Route path="/password" element={<PasswordPage />} /> 
+        <Route path="/stores" element={<StoresPage />} />
         <Route path="/stock" element={<StockPage />} />
-
-        {/* هدایت آدرس‌های اشتباه */}
         <Route path="*" element={<Navigate to="/" />} />
-
-<Route path="/verify" element={<PasswordPage />} />
-
-        
       </Routes>
     </Router>
   );

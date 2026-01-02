@@ -66,7 +66,7 @@ const handleSubmit = (e) => {
     <div className="verify-container">
       <div className="verify-card">
         <div className="logo-container">
-          <img src={logoRazy} alt="رازیار" className="logo-img" />
+          <img src={logoRazy} alt="رازی" className="logo-img" />
         </div>
         
         <h2 className="verify-title">کد تایید یکبار مصرف</h2>
