@@ -4,14 +4,16 @@ const api = axios.create({
   baseURL: 'https://mws.razysoft.com/api',
 });
 
-// این بخش حیاتی است: چسباندن توکن به تمام درخواست‌ها
+// این بخش توکن را به تمام درخواست‌ها می‌چسباند
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token'); // مطمئن شو توکن را با نام token ذخیره کردی
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    // طبق عکس پست‌من شما، سرور AppToken می‌خواهد
+    config.headers['AppToken'] = token; 
   }
   return config;
+}, (error) => {
+  return Promise.reject(error);
 });
 
 export default api;
-

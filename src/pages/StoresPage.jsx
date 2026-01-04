@@ -8,12 +8,15 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
+import api from '../api/axiosConfigs';
 import logoRazy from '../assets/RazyLogo.png';
 import { useNavigate } from 'react-router-dom';
 
 const StoresPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const [stores, setStores] = useState([]); // دیتای سرور اینجا قرار می‌گیرد
+  const [loading, setLoading] = useState(true); // وضعیت انتظار برای لود دیتا
   
   const [userData, setUserData] = useState({ 
     FullName: '', 
@@ -22,6 +25,7 @@ const StoresPage = () => {
   });
 
   useEffect(() => {
+    // ۱. لود اطلاعات پروفایل کاربر
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
       try {
@@ -35,17 +39,29 @@ const StoresPage = () => {
         console.error("خطا در خواندن اطلاعات کاربر");
       }
     }
+
+    // ۲. فراخوانی API برای دریافت لیست واقعی مشتریان
+    const fetchStores = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get('/b2b/Commodity/stores'); 
+        const actualData = response.data?.data || response.data?.Data || response.data || [];
+        setStores(Array.isArray(actualData) ? actualData : []);
+      } catch (err) {
+        console.error("خطا در دریافت لیست مشتریان:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStores();
   }, []);
 
-  const allStores = [
-    { id: 1, name: 'مانتو جردن', phone: '۰۹۹۲ ۸۷۸ ۴۸۴۶' },
-    { id: 2, name: 'بوتیک ونک', phone: '۰۹۱۲ ۳۴۵ ۶۷۸۹' },
-    { id: 3, name: 'گالری سارینا', phone: '۰۹۳۵ ۷۸۹ ۱۲۳۴' },
-  ];
-
-  const filteredStores = allStores.filter(store => 
-    store.name.includes(searchTerm)
-  );
+  // فیلتر کردن هوشمند روی دیتای دریافتی از سرور
+  const filteredStores = stores.filter(store => {
+    const name = (store.Name || store.StoreName || '').toLowerCase();
+    return name.includes(searchTerm.toLowerCase());
+  });
 
   const getAvatar = () => {
     return userData.Avatar || `https://ui-avatars.com/api/?name=${userData.FullName}&background=random`;
@@ -60,11 +76,9 @@ const StoresPage = () => {
           <div className="top-nav-right">
             <div className="breadcrumb">
               <h1>داشبورد</h1>
-              {/* متن زیر داشبورد طبق درخواست حذف شد */}
             </div>
           </div>
 
-          {/* باکس جستجوی وسط هدر طبق درخواست حذف شد */}
           <div className="top-nav-center"></div>
 
           <div className="top-nav-left">
@@ -84,7 +98,6 @@ const StoresPage = () => {
         </header>
 
         <main className="main-content">
-          {/* باکس پیام آبی رنگ طبق درخواست حذف شد */}
 
           <div className="table-card">
             <div className="table-header">
@@ -113,14 +126,20 @@ const StoresPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredStores.map((store) => (
-                  <tr key={store.id} onClick={() => navigate('/stock')} className="clickable-row">
-                    <td><input type="checkbox" onClick={(e) => e.stopPropagation()} /></td>
-                    <td className="name-cell">{store.name}</td>
-                    <td className="phone-cell">{store.phone}</td>
-                    <td><button className="details-btn">نمایش جزییات</button></td>
-                  </tr>
-                ))}
+                {loading ? (
+                  <tr><td colSpan="4" style={{ textAlign: 'center', padding: '20px' }}>در حال بارگذاری...</td></tr>
+                ) : filteredStores.length > 0 ? (
+                  filteredStores.map((store, index) => (
+                    <tr key={index} onClick={() => navigate('/stock')} className="clickable-row">
+                      <td><input type="checkbox" onClick={(e) => e.stopPropagation()} /></td>
+                      <td className="name-cell">{store.Name || store.StoreName || 'بدون نام'}</td>
+                      <td className="phone-cell">{store.Mobile || '---'}</td>
+                      <td><button className="details-btn">نمایش جزییات</button></td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr><td colSpan="4" style={{ textAlign: 'center', padding: '20px' }}>مشتری یافت نشد.</td></tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -134,22 +153,16 @@ const StoresPage = () => {
             <img src={logoRazy} alt="logo" className="sidebar-logo" />
           </div>
 
-          {/* جستجوی سایدبار طبق درخواست حذف شد */}
-
           <nav className="side-menu">
             <div className="menu-group active">
               <div className="menu-item active">
-                {/* Chevron حذف نشد تا استایل حفظ شود، اما زیرمنوها حذف شدند */}
                 <ChevronDown size={16} />
                 <span>مشتریان من</span>
                 <Users size={20} />
               </div>
             </div>
-            
-            {/* گزینه‌های انبار من و فروشگاه‌ها طبق درخواست حذف شدند */}
 
             <div className="sidebar-bottom-sections" style={{ marginTop: 'auto' }}>
-              {/* بخش پشتیبانی و پروفایل پایین سایدبار طبق درخواست حذف شدند */}
             </div>
           </nav>
         </div>
