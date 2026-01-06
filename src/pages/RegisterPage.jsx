@@ -32,19 +32,24 @@ const RegisterPage = () => {
 
     // ۲. بررسی صحت کد ملی
     if (!isValidNationalCode(formData.NationalCode)) {
-      setError('کد ملی وارد شده از نظر ساختاری معتبر نیست');
+      setError('کد ملی وارد شده معتبر نیست');
       return;
     }
 
+<<<<<<< HEAD
     // ۳. بررسی شماره موبایل (باید ۱۱ رقم باشد و با ۰۹ شروع شود)
+=======
+    // ۳. بررسی شماره موبایل (باید دقیقا ۱۱ رقم باشد و با ۰۹ شروع شود)
+>>>>>>> 0e49202
     if (!/^09\d{9}$/.test(formData.PhoneNumber)) {
-      setError('شماره موبایل باید با ۰۹ شروع شده و ۱۱ رقم باشد');
+      setError('شماره موبایل معتبر نیست (مثال: 09123456789)');
       return;
     }
 
     setLoading(true);
 
     try {
+<<<<<<< HEAD
       // ساخت پلود بر اساس مستندات Postman
       const payload = {
         PhoneNumber: formData.PhoneNumber, // ارسال دقیق شماره ۱۱ رقمی
@@ -68,13 +73,44 @@ const RegisterPage = () => {
       const serverMessage = err.response?.data?.Message;
       setError(serverMessage || "خطا در اتصال به سرور. لطفاً دوباره تلاش کنید.");
       console.error("Server Error Details:", err.response?.data);
+=======
+      // ساخت پلود ارسالی به سرور
+      const payload = {
+        NationalCode: formData.NationalCode,
+        // اینجا دقیقا شماره‌ای که کاربر وارد کرده (09...) را می‌فرستیم
+        PhoneNumber: formData.PhoneNumber, 
+        Type: formData.ActivityType === 'seller' ? 1 : 2
+      };
+
+      // ارسال درخواست به API
+      const response = await api.post('/b2b/Customer/SignUp', payload);
+      
+      // اگر موفقیت‌آمیز بود، شماره را برای مرحله تایید ذخیره می‌کنیم
+      localStorage.setItem('tempPhone', formData.PhoneNumber);
+      navigate('/verify');
+
+    } catch (err) {
+      console.error("Registration Error:", err);
+      
+      // مدیریت هوشمند پیام خطا
+      if (err.response) {
+        // سرور پاسخ داده اما با خطا (مثلا ۴۰۰ یا ۵۰۰)
+        const serverMsg = err.response.data?.Message || err.response.data?.message;
+        setError(serverMsg || "اطلاعات وارد شده مورد تایید سرور نیست");
+      } else if (err.request) {
+        // درخواست ارسال شده اما پاسخی دریافت نشده (مشکل پورت ۴۰۰۱ یا اینترنت)
+        setError("خطا در اتصال به سرور؛ لطفاً وضعیت پورت ۴۰۰۱ را بررسی کنید");
+      } else {
+        setError("خطایی در تنظیمات درخواست رخ داد");
+      }
+>>>>>>> 0e49202
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="register-container">
+    <div className="register-container" style={{ direction: 'rtl', fontFamily: 'Tahoma' }}>
       <div className="register-card">
         <div className="logo-container">
           <img src={logoRazy} alt="رازی" className="logo-img" />
@@ -82,7 +118,11 @@ const RegisterPage = () => {
         <h2 className="register-title">ثبت‌نام</h2>
         
         <form onSubmit={handleRegister}>
+<<<<<<< HEAD
           {/* انتخاب نوع فعالیت */}
+=======
+          {/* ۱. انتخاب نوع فعالیت */}
+>>>>>>> 0e49202
           <div className="input-group">
             <label className="register-label">نوع فعالیت</label>
             <select 
@@ -96,7 +136,11 @@ const RegisterPage = () => {
             </select>
           </div>
 
+<<<<<<< HEAD
           {/* ورود کد ملی */}
+=======
+          {/* ۲. وارد کردن کد ملی */}
+>>>>>>> 0e49202
           <div className="input-group">
             <label className="register-label">کد ملی</label>
             <input 
@@ -105,42 +149,65 @@ const RegisterPage = () => {
               className="register-custom-input"
               placeholder="مثال: 3861147904"
               value={formData.NationalCode}
+<<<<<<< HEAD
               onInput={(e) => {
                 e.target.value = e.target.value.replace(/[^0-9]/g, '');
                 setFormData({...formData, NationalCode: e.target.value});
+=======
+              onChange={(e) => {
+                const val = e.target.value.replace(/[^0-9]/g, '');
+                setFormData({...formData, NationalCode: val});
+>>>>>>> 0e49202
               }}
             />
           </div>
 
+<<<<<<< HEAD
           {/* ورود شماره همراه */}
+=======
+          {/* ۳. وارد کردن شماره همراه */}
+>>>>>>> 0e49202
           <div className="input-group">
             <label className="register-label">شماره همراه</label>
-            <div className="phone-input-container">
-              <div className="country-code">+۹۸</div>
+            <div className="phone-input-container" style={{ display: 'flex', alignItems: 'center' }}>
+              <div className="country-code" style={{ padding: '0 10px', color: '#64748b' }}>+۹۸</div>
               <input 
                 type="text" 
                 maxLength="11"
                 className="phone-input"
+<<<<<<< HEAD
                 placeholder="09338030405"
                 value={formData.PhoneNumber}
                 onInput={(e) => {
                   e.target.value = e.target.value.replace(/[^0-9]/g, '');
                   setFormData({...formData, PhoneNumber: e.target.value});
+=======
+                style={{ flexGrow: 1, textAlign: 'left', direction: 'ltr' }}
+                placeholder="09123456789"
+                value={formData.PhoneNumber}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/[^0-9]/g, '');
+                  setFormData({...formData, PhoneNumber: val});
+>>>>>>> 0e49202
                 }}
               />
             </div>
           </div>
 
-          {error && <p className="error-text-small">{error}</p>}
+          {error && (
+            <div style={{ backgroundColor: '#fef2f2', color: '#ef4444', padding: '10px', borderRadius: '8px', fontSize: '12px', marginBottom: '15px', textAlign: 'center' }}>
+              {error}
+            </div>
+          )}
 
-          <button type="submit" className="main-button" disabled={loading}>
-            {loading ? 'در حال ارسال...' : 'تایید و دریافت کد'}
+          <button type="submit" className="main-button" disabled={loading} style={{ width: '100%', cursor: loading ? 'not-allowed' : 'pointer' }}>
+            {loading ? 'در حال پردازش...' : 'تایید و دریافت کد'}
           </button>
         </form>
 
-        <p className="footer-text">
+        <p className="footer-text" style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px' }}>
           قبلاً ثبت‌نام کرده‌اید؟ 
-          <span onClick={() => navigate('/login')} className="link-text"> ورود</span>
+          <span onClick={() => navigate('/login')} className="link-text" style={{ color: '#f97316', cursor: 'pointer', fontWeight: 'bold', marginRight: '5px' }}> ورود</span>
         </p>
       </div>
     </div>

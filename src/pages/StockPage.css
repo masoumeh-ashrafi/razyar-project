@@ -245,3 +245,68 @@
 .clickable-row:hover {
   background: #fcfdfe;
 }
+/* تنظیم کانتینر اصلی سایدبار */
+.right-sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-left: 1px solid #f1f5f9;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* کوچک کردن و وسط‌چین کردن لوگو */
+.sidebar-logo {
+  width: 100px !important; /* اندازه لوگو رو کنترل می‌کنه */
+  height: auto;
+  margin: 0 auto 30px auto;
+  display: block;
+}
+
+/* استایل باکس سرچ سایدبار */
+.sidebar-search {
+  background-color: #f8fafc;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 25px;
+}
+
+/* آیتم‌های منو */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #64748b;
+  margin-bottom: 5px;
+}
+
+.menu-item.active {
+  background-color: #eff6ff;
+  color: #3b82f6;
+  font-weight: bold;
+}
+
+/* بخش پروفایل پایین سایدبار (مثل عکس) */
+.profile-combo {
+  margin-top: auto; /* پروفایل رو می‌چسبونه به پایین */
+  background-color: #f8fafc;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  object-fit: cover;
+}

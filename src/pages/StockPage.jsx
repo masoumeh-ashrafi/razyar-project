@@ -1,18 +1,35 @@
 import './StockPage.css';
 
+<<<<<<< HEAD
 import { Bell, ChevronDown, ChevronLeft, MessageCircle, Package, Search, Settings, Users } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+=======
+import { Bell, ChevronDown, Package, Search, Users } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+>>>>>>> 0e49202
 
 import api from '../api/axiosConfigs';
 import logoRazy from '../assets/RazyLogo.png';
 import { useNavigate } from 'react-router-dom';
 
+<<<<<<< HEAD
+=======
+// اضافه شد به لیست ایمپورت‌ها Search
+
+
+
+
+
+
+
+>>>>>>> 0e49202
 const StockPage = () => {
   const [stockData, setStockData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+<<<<<<< HEAD
   const rawUser = localStorage.getItem('user');
   const userData = rawUser ? JSON.parse(rawUser) : {
     FullName: 'کاربر سیستم',
@@ -21,11 +38,38 @@ const StockPage = () => {
   };
 
   useEffect(() => {
+=======
+  const [userData, setUserData] = useState({
+    FullName: '',
+    Mobile: '',
+    Avatar: ''
+  });
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        setUserData({
+          FullName: parsed.FullName || parsed.fullName || 'کاربر سیستم',
+          Mobile: parsed.Mobile || parsed.phoneNumber || '',
+          Avatar: parsed.Avatar || parsed.avatar || ''
+        });
+      } catch (e) {
+        console.error("خطا در بارگذاری پروفایل");
+      }
+    }
+
+>>>>>>> 0e49202
     const fetchStock = async () => {
       try {
         setLoading(true);
         const response = await api.get('/b2b/Commodity/Stock');
+<<<<<<< HEAD
         const actualData = response.data?.data || response.data || [];
+=======
+        const actualData = response.data?.data || response.data?.Data || response.data || [];
+>>>>>>> 0e49202
         setStockData(Array.isArray(actualData) ? actualData : []);
       } catch (err) {
         console.error("خطا در دریافت لیست انبار:", err);
@@ -36,6 +80,7 @@ const StockPage = () => {
     fetchStock();
   }, []);
 
+<<<<<<< HEAD
   const filteredData = stockData.filter(item => {
     const name = (item.CmFullName || '').toLowerCase();
     const barcode = (item.Barcode || '').toString();
@@ -49,17 +94,48 @@ const StockPage = () => {
       <aside className="right-sidebar" style={{ width: '280px', backgroundColor: '#fff', borderLeft: '1px solid #f0f0f0', position: 'fixed', right: 0, top: 0, bottom: 0, zIndex: 1000, display: 'flex', flexDirection: 'column' }}>
         <div style={{ padding: '24px' }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+=======
+  const filteredData = useMemo(() => {
+    return stockData.filter(item => {
+      const name = (item.Name || item.CommodityName || item.CmFullName || '').toLowerCase();
+      const barcode = (item.Barcode || item.Code || '').toString();
+      const searchLower = searchTerm.toLowerCase();
+      return name.includes(searchLower) || barcode.includes(searchLower);
+    });
+  }, [searchTerm, stockData]);
+
+  const handleImageError = (e) => {
+    e.target.src = "https://ui-avatars.com/api/?name=" + (userData.FullName || 'User') + "&background=random";
+  };
+
+  return (
+    <div className="dashboard-container" style={{ direction: 'rtl', display: 'flex', backgroundColor: '#fcfcfc', height: '100vh', overflow: 'hidden', fontFamily: 'Tahoma' }}>
+      
+      {/* سایدبار ثابت راست - اصلاح شده طبق نظر آقای توکلی */}
+      <aside className="right-sidebar" style={{ width: '280px', backgroundColor: '#fff', borderLeft: '1px solid #f0f0f0', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
+        <div style={{ padding: '24px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+>>>>>>> 0e49202
             <img src={logoRazy} alt="logo" style={{ width: '130px' }} />
           </div>
 
           <nav>
+<<<<<<< HEAD
             <div onClick={() => navigate('/stores')} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', color: '#64748b', cursor: 'pointer', marginBottom: '8px' }}>
+=======
+            <div onClick={() => navigate('/stores')} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', color: '#64748b', cursor: 'pointer', marginBottom: '4px' }}>
+>>>>>>> 0e49202
               <Users size={20} />
               <span>مشتریان من</span>
             </div>
             
+<<<<<<< HEAD
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', backgroundColor: '#fff7ed', borderRadius: '12px', color: '#f97316' }}>
               <Settings size={20} />
+=======
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', backgroundColor: '#eff6ff', borderRadius: '12px', color: '#3b82f6' }}>
+              <Package size={20} />
+>>>>>>> 0e49202
               <span style={{ fontWeight: 'bold' }}>انبار من (موجودی)</span>
             </div>
           </nav>
@@ -82,6 +158,7 @@ const StockPage = () => {
         </div>
       </aside>
 
+<<<<<<< HEAD
       {/* محتوای اصلی با قابلیت اسکرول */}
       <div style={{ marginRight: '280px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 40px', backgroundColor: '#fff', borderBottom: '1px solid #f1f5f9', position: 'sticky', top: 0, zIndex: 999 }}>
@@ -107,16 +184,59 @@ const StockPage = () => {
                 <div style={{ fontSize: '11px', color: '#94a3b8' }}>{userData.Mobile}</div>
               </div>
               <img src={userData.Avatar || "https://via.placeholder.com/40"} style={{ width: '40px', height: '40px', borderRadius: '50%' }} alt="avatar" />
+=======
+      {/* محتوای اصلی */}
+      <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 40px', backgroundColor: '#fff', borderBottom: '1px solid #f1f5f9' }}>
+          <div>
+            <h1 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0 }}>موجودی کالا</h1>
+          </div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{userData.FullName}</div>
+                <div style={{ fontSize: '11px', color: '#94a3b8' }}>{userData.Mobile}</div>
+              </div>
+              <img 
+                src={userData.Avatar || "https://via.placeholder.com/40"} 
+                onError={handleImageError}
+                style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} 
+                alt="avatar" 
+              />
+>>>>>>> 0e49202
             </div>
             <Bell size={22} color="#64748b" />
           </div>
         </header>
 
+<<<<<<< HEAD
         <main style={{ padding: '32px 40px' }}>
           <div style={{ backgroundColor: '#fff', borderRadius: '20px', border: '1px solid #f1f5f9', overflow: 'hidden' }}>
             <div style={{ padding: '24px 32px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '12px' }}>
               <Package size={22} color="#f97316" />
               <span style={{ fontWeight: 'bold' }}>لیست موجودی انبار ({stockData.length})</span>
+=======
+        <main style={{ padding: '32px 40px', overflowY: 'auto', flexGrow: 1 }}>
+          
+          <div style={{ backgroundColor: '#fff', borderRadius: '20px', border: '1px solid #f1f5f9', overflow: 'hidden' }}>
+            <div style={{ padding: '24px 32px', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <Package size={22} color="#f97316" />
+                <span style={{ fontWeight: 'bold' }}>لیست موجودی انبار</span>
+              </div>
+              
+              {/* جستجوی جدول برای پیدا کردن کالاها */}
+              <div style={{ position: 'relative' }}>
+                <Search size={16} color="#94a3b8" style={{ position: 'absolute', right: '12px', top: '10px' }} />
+                <input 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="جستجو در انبار..." 
+                  style={{ padding: '8px 35px 8px 15px', borderRadius: '10px', border: '1px solid #f1f5f9', backgroundColor: '#f8fafc', outline: 'none', fontSize: '13px' }}
+                />
+              </div>
+>>>>>>> 0e49202
             </div>
             
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'right' }}>
@@ -130,6 +250,7 @@ const StockPage = () => {
               </thead>
               <tbody>
                 {loading ? (
+<<<<<<< HEAD
                   <tr><td colSpan="4" style={{ textAlign: 'center', padding: '60px' }}>در حال بارگذاری کالاها...</td></tr>
                 ) : filteredData.map((item, index) => (
                   <tr key={index} style={{ borderBottom: '1px solid #f8fafc' }}>
@@ -149,6 +270,35 @@ const StockPage = () => {
                     </td>
                   </tr>
                 ))}
+=======
+                  <tr><td colSpan="4" style={{ textAlign: 'center', padding: '60px' }}>در حال بارگذاری...</td></tr>
+                ) : filteredData.length > 0 ? filteredData.map((item, index) => {
+                  const itemName = item.Name || item.CommodityName || item.CmFullName || "نامشخص";
+                  const itemBarcode = item.Barcode || item.Code || (index + 1);
+                  const stockValue = item.Sell ?? item.Stock ?? item.Quantity ?? 0;
+
+                  return (
+                    <tr key={index} style={{ borderBottom: '1px solid #f8fafc' }}>
+                      <td style={{ padding: '20px 32px', textAlign: 'center' }}><input type="checkbox" /></td>
+                      <td style={{ padding: '20px 32px', color: '#64748b' }}>#{itemBarcode}</td>
+                      <td style={{ padding: '20px 32px', fontWeight: '500' }}>{itemName}</td>
+                      <td style={{ padding: '20px 32px', textAlign: 'center' }}>
+                        <span style={{ 
+                          padding: '4px 12px', 
+                          borderRadius: '6px', 
+                          backgroundColor: stockValue === 0 ? '#fef2f2' : '#f0fdf4',
+                          color: stockValue === 0 ? '#ef4444' : '#22c55e',
+                          fontWeight: 'bold'
+                        }}>
+                          {stockValue === 0 ? 'ناموجود' : `${stockValue} عدد`}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                }) : (
+                  <tr><td colSpan="4" style={{ textAlign: 'center', padding: '60px', color: '#94a3b8' }}>کالایی با این مشخصات یافت نشد.</td></tr>
+                )}
+>>>>>>> 0e49202
               </tbody>
             </table>
           </div>
