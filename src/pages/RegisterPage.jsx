@@ -36,11 +36,7 @@ const RegisterPage = () => {
       return;
     }
 
-<<<<<<< HEAD
-    // ۳. بررسی شماره موبایل (باید ۱۱ رقم باشد و با ۰۹ شروع شود)
-=======
     // ۳. بررسی شماره موبایل (باید دقیقا ۱۱ رقم باشد و با ۰۹ شروع شود)
->>>>>>> 0e49202
     if (!/^09\d{9}$/.test(formData.PhoneNumber)) {
       setError('شماره موبایل معتبر نیست (مثال: 09123456789)');
       return;
@@ -49,61 +45,34 @@ const RegisterPage = () => {
     setLoading(true);
 
     try {
-<<<<<<< HEAD
-      // ساخت پلود بر اساس مستندات Postman
+      // ساخت پلود ارسالی به سرور (ترکیب منطق هر دو نسخه)
       const payload = {
-        PhoneNumber: formData.PhoneNumber, // ارسال دقیق شماره ۱۱ رقمی
-        NationalCode: formData.NationalCode, // کد ملی ۱۰ رقمی
-        Type: formData.ActivityType === 'seller' ? 0 : 1 // طبق مقدار عددی پست‌من (فروشنده=0)
-      };
-
-      // ارسال درخواست همراه با AppToken در هدر
-      const response = await api.post('/b2b/Customer/SignUp', payload, {
-        headers: {
-          'AppToken': 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEyNTEwMTIiLCJrZXkiOiIxNiIsImV4cGlyZURhdGUiOiIyMDI2LzAxLzIyIiwiSXNBdmFpbGFibGUiOiJUUlVFIiwibmJmIjoxNzY2NDkxNTk1LCJleHAiOjE3NjkwODM1OTUsImlhdCI6MTc2NjQ5MTU5NX0.gqDZn-FsOkW6Y61DiLvwZRvuDyzYgHkoh4IgZiB4xJVqG6RMFTuu5t8o8sV277ojg25Y_J77lVDh5gKWYr_NqQ'
-        }
-      });
-
-      // ذخیره شماره برای استفاده در صفحه تایید
-      localStorage.setItem('tempPhone', formData.PhoneNumber);
-      navigate('/verify');
-      
-    } catch (err) {
-      // نمایش پیام خطای دقیق سرور یا پیام پیش‌فرض
-      const serverMessage = err.response?.data?.Message;
-      setError(serverMessage || "خطا در اتصال به سرور. لطفاً دوباره تلاش کنید.");
-      console.error("Server Error Details:", err.response?.data);
-=======
-      // ساخت پلود ارسالی به سرور
-      const payload = {
+        PhoneNumber: formData.PhoneNumber,
         NationalCode: formData.NationalCode,
-        // اینجا دقیقا شماره‌ای که کاربر وارد کرده (09...) را می‌فرستیم
-        PhoneNumber: formData.PhoneNumber, 
-        Type: formData.ActivityType === 'seller' ? 1 : 2
+        Type: formData.ActivityType === 'seller' ? 1 : 2 // طبق استاندارد جدید پنل
       };
 
       // ارسال درخواست به API
       const response = await api.post('/b2b/Customer/SignUp', payload);
       
-      // اگر موفقیت‌آمیز بود، شماره را برای مرحله تایید ذخیره می‌کنیم
+      // ذخیره شماره برای استفاده در صفحه تایید
       localStorage.setItem('tempPhone', formData.PhoneNumber);
       navigate('/verify');
-
+      
     } catch (err) {
       console.error("Registration Error:", err);
       
-      // مدیریت هوشمند پیام خطا
+      // مدیریت هوشمند پیام خطا (بسیار مهم برای عیب‌یابی)
       if (err.response) {
-        // سرور پاسخ داده اما با خطا (مثلا ۴۰۰ یا ۵۰۰)
+        // سرور پاسخ داده اما با خطا
         const serverMsg = err.response.data?.Message || err.response.data?.message;
         setError(serverMsg || "اطلاعات وارد شده مورد تایید سرور نیست");
       } else if (err.request) {
-        // درخواست ارسال شده اما پاسخی دریافت نشده (مشکل پورت ۴۰۰۱ یا اینترنت)
-        setError("خطا در اتصال به سرور؛ لطفاً وضعیت پورت ۴۰۰۱ را بررسی کنید");
+        // عدم دریافت پاسخ از سرور (مشکل اتصال یا پورت)
+        setError("خطا در اتصال به سرور؛ لطفاً وضعیت اینترنت یا پورت ۴۰۰۱ را بررسی کنید");
       } else {
         setError("خطایی در تنظیمات درخواست رخ داد");
       }
->>>>>>> 0e49202
     } finally {
       setLoading(false);
     }
@@ -118,11 +87,7 @@ const RegisterPage = () => {
         <h2 className="register-title">ثبت‌نام</h2>
         
         <form onSubmit={handleRegister}>
-<<<<<<< HEAD
-          {/* انتخاب نوع فعالیت */}
-=======
           {/* ۱. انتخاب نوع فعالیت */}
->>>>>>> 0e49202
           <div className="input-group">
             <label className="register-label">نوع فعالیت</label>
             <select 
@@ -136,11 +101,7 @@ const RegisterPage = () => {
             </select>
           </div>
 
-<<<<<<< HEAD
-          {/* ورود کد ملی */}
-=======
           {/* ۲. وارد کردن کد ملی */}
->>>>>>> 0e49202
           <div className="input-group">
             <label className="register-label">کد ملی</label>
             <input 
@@ -149,24 +110,14 @@ const RegisterPage = () => {
               className="register-custom-input"
               placeholder="مثال: 3861147904"
               value={formData.NationalCode}
-<<<<<<< HEAD
-              onInput={(e) => {
-                e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                setFormData({...formData, NationalCode: e.target.value});
-=======
               onChange={(e) => {
                 const val = e.target.value.replace(/[^0-9]/g, '');
                 setFormData({...formData, NationalCode: val});
->>>>>>> 0e49202
               }}
             />
           </div>
 
-<<<<<<< HEAD
-          {/* ورود شماره همراه */}
-=======
           {/* ۳. وارد کردن شماره همراه */}
->>>>>>> 0e49202
           <div className="input-group">
             <label className="register-label">شماره همراه</label>
             <div className="phone-input-container" style={{ display: 'flex', alignItems: 'center' }}>
@@ -175,20 +126,12 @@ const RegisterPage = () => {
                 type="text" 
                 maxLength="11"
                 className="phone-input"
-<<<<<<< HEAD
-                placeholder="09338030405"
-                value={formData.PhoneNumber}
-                onInput={(e) => {
-                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                  setFormData({...formData, PhoneNumber: e.target.value});
-=======
                 style={{ flexGrow: 1, textAlign: 'left', direction: 'ltr' }}
                 placeholder="09123456789"
                 value={formData.PhoneNumber}
                 onChange={(e) => {
                   const val = e.target.value.replace(/[^0-9]/g, '');
                   setFormData({...formData, PhoneNumber: val});
->>>>>>> 0e49202
                 }}
               />
             </div>
