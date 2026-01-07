@@ -48,13 +48,14 @@ const StockPage = () => {
     fetchStock();
   }, []);
 
-  // ۳. فیلتر کردن هوشمند کالاها
+  // ۳. فیلتر کردن کالاها
   const filteredData = useMemo(() => {
     return stockData.filter(item => {
-      const name = (item.Name || item.CommodityName || item.CmFullName || '').toLowerCase();
-      const barcode = (item.Barcode || item.Code || '').toString();
+      const name = (item.Name || '').toLowerCase();
+      const fullName = (item.CmFullName || '').toLowerCase();
+      const barcode = (item.Barcode || '').toString();
       const searchLower = searchTerm.toLowerCase();
-      return name.includes(searchLower) || barcode.includes(searchLower);
+      return name.includes(searchLower) || fullName.includes(searchLower) || barcode.includes(searchLower);
     });
   }, [searchTerm, stockData]);
 
@@ -65,7 +66,7 @@ const StockPage = () => {
   return (
     <div className="dashboard-container" style={{ direction: 'rtl', display: 'flex', backgroundColor: '#fcfcfc', height: '100vh', overflow: 'hidden', fontFamily: 'Tahoma' }}>
       
-      {/* سایدبار ثابت راست - نسخه اصلاح شده */}
+      {/* سایدبار ثابت راست */}
       <aside className="right-sidebar" style={{ width: '280px', backgroundColor: '#fff', borderLeft: '1px solid #f0f0f0', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
         <div style={{ padding: '24px' }}>
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
@@ -86,10 +87,6 @@ const StockPage = () => {
         </div>
 
         <div style={{ marginTop: 'auto', padding: '24px', borderTop: '1px solid #f8fafc' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '15px', borderRadius: '16px', marginBottom: '15px', cursor: 'pointer' }}>
-          </div>
-
-          
         </div>
       </aside>
 
@@ -144,24 +141,28 @@ const StockPage = () => {
                 {loading ? (
                   <tr><td colSpan="4" style={{ textAlign: 'center', padding: '60px' }}>در حال بارگذاری...</td></tr>
                 ) : filteredData.length > 0 ? filteredData.map((item, index) => {
-                  const itemName = item.Name || item.CommodityName || item.CmFullName || "نامشخص";
-                  const itemBarcode = item.Barcode || item.Code || (index + 1);
-                  const stockValue = item.Sell ?? item.Stock ?? item.Quantity ?? 0;
+                  const itemName = item.CmFullName || "نامشخص";
+                  const itemBarcode = item.Barcode || "---";
+                  const stockValue = item.Supply ?? 0;
 
                   return (
-                    <tr key={index} style={{ borderBottom: '1px solid #f8fafc' }}>
+                    <tr key={item._id || index} style={{ borderBottom: '1px solid #f8fafc' }}>
                       <td style={{ padding: '20px 32px', textAlign: 'center' }}><input type="checkbox" /></td>
                       <td style={{ padding: '20px 32px', color: '#64748b' }}>#{itemBarcode}</td>
-                      <td style={{ padding: '20px 32px', fontWeight: '500' }}>{itemName}</td>
+                      <td style={{ padding: '20px 32px', fontWeight: '500' }}>
+                        {itemName}
+                      </td>
                       <td style={{ padding: '20px 32px', textAlign: 'center' }}>
                         <span style={{ 
                           padding: '4px 12px', 
                           borderRadius: '6px', 
-                          backgroundColor: stockValue === 0 ? '#fef2f2' : '#f0fdf4',
-                          color: stockValue === 0 ? '#ef4444' : '#22c55e',
-                          fontWeight: 'bold'
+                          backgroundColor: stockValue <= 0 ? '#fef2f2' : '#f0fdf4',
+                          color: stockValue <= 0 ? '#ef4444' : '#22c55e',
+                          fontWeight: 'bold',
+                          display: 'inline-block',
+                          minWidth: '80px'
                         }}>
-                          {stockValue === 0 ? 'ناموجود' : `${stockValue} عدد`}
+                          {stockValue <= 0 ? 'ناموجود' : `${stockValue} عدد`}
                         </span>
                       </td>
                     </tr>
@@ -175,7 +176,6 @@ const StockPage = () => {
         </main>
       </div>
     </div> 
-    
   );
 };
 
