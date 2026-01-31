@@ -16,6 +16,11 @@ const StockPage = () => {
 
   // ۱. بارگذاری اطلاعات کاربر از LocalStorage
   useEffect(() => {
+    const token = localStorage.getItem('token');
+  if (!token) {
+    navigate('/login'); // اگر توکن نبود برگرده به لاگین
+    return;
+  }
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
       try {
@@ -36,7 +41,7 @@ const StockPage = () => {
     const fetchStock = async () => {
       try {
         setLoading(true);
-        const response = await api.get('/b2b/Commodity/Stock');
+const response = await api.get('/b2b/Commodity/Stock');
         const actualData = response.data?.data || response.data?.Data || response.data || [];
         setStockData(Array.isArray(actualData) ? actualData : []);
       } catch (err) {

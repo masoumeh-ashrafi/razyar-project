@@ -1,23 +1,29 @@
-import axios from 'axios';
+// src/api/axiosConfigs.js
+
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'https://mws.razysoft.com/api',
-  timeout: 10000,
+  baseURL: "https://mws.razysoft.com/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-// این بخش توکن را به تمام درخواست‌ها می‌چسباند
-api.interceptors.request.use((config) => {
+// همیشه توکن را با نام صحیح هدر ارسال کن: Apptoken
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    const cleanToken = token?.trim();
 
-  config.headers['AppToken'] = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjA5MzM4MDMwNDA1IiwiaXNjdXN0b21lciI6InRydWUiLCJSZWdpc3RlckNvbXBsZXRlZCI6IlRSVUUiLCJuYmYiOjE3NjY2NTY3NDMsImV4cCI6MTc2OTI0ODc0MywiaWF0IjoxNzY2NjU2NzQzfQ.BU6oiDZYB6f78y9Cv10tC1CCYK_vqQb0XnfQMtMLWjuyN9BUkhXa-7vTFMvVq9eWCOQf1NQ6NywL293BKJ59lw';
-  
-  const token = localStorage.getItem('token'); // مطمئن شو توکن را با نام token ذخیره کردی
-  if (token) {
-    // اگر توکن در سیستم کاربر موجود بود، جایگزین می‌شود
-    config.headers['AppToken'] = token; 
-  }
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+    if (cleanToken) {
+      config.headers.Apptoken = cleanToken; // ✅ مهم: دقیقاً همین اسم
+    } else {
+      delete config.headers.Apptoken;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export default api;

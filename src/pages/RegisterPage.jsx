@@ -1,156 +1,172 @@
 import './RegisterPage.css';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import api from '../api/axiosConfigs';
 import logoRazy from '../assets/RazyLogo.png';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
-  const [formData, setFormData] = useState({ NationalCode: '', PhoneNumber: '', ActivityType: '' });
+  const [type, setType] = useState(''); // کاربر انتخاب کند (0/1)
+  const [nationalCode, setNationalCode] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState(''); // 10 رقم و شروع با 9
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // تابع اعتبارسنجی الگوریتم کد ملی
-  const isValidNationalCode = (code) => {
-    if (!/^\d{10}$/.test(code)) return false;
-    const check = +code[9];
-    const sum = code.split('').slice(0, 9).reduce((acc, x, i) => acc + +x * (10 - i), 0) % 11;
-    return sum < 2 ? check === sum : check === 11 - sum;
+  // تبدیل اعداد فارسی به انگلیسی + حذف کاراکترهای غیر عدد
+  const normalizeNumber = (v) =>
+    (v || '')
+      .replace(/[۰-۹]/g, (d) => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+      .replace(/[^\d]/g, '');
+
+  const normalizedNationalCode = useMemo(() => normalizeNumber(nationalCode), [nationalCode]);
+  const normalizedPhone = useMemo(() => normalizeNumber(phoneNumber), [phoneNumber]);
+
+  // ✅ اعتبارسنجی استاندارد کد ملی ایران (Checksum)
+  const isValidIranianNationalCode = (code) => {
+    const c = (code || '').toString();
+
+    // باید دقیقاً 10 رقم باشد
+    if (!/^\d{10}$/.test(c)) return false;
+
+    // جلوگیری از کدهای تکراری (0000000000 تا 9999999999)
+    if (/^(\d)\1{9}$/.test(c)) return false;
+
+    const check = Number(c[9]);
+    let sum = 0;
+
+    // وزن‌ها: 10 تا 2
+    for (let i = 0; i < 9; i++) {
+      sum += Number(c[i]) * (10 - i);
+    }
+
+    const remainder = sum % 11;
+    const expected = remainder < 2 ? remainder : 11 - remainder;
+
+    return check === expected;
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
 
-    // ۱. بررسی انتخاب نوع فعالیت
-    if (!formData.ActivityType) {
-      setError('لطفاً نوع فعالیت خود را انتخاب کنید');
+    // نوع کاربر
+    if (type === '') {
+      setError('لطفاً نوع کاربر را انتخاب کنید.');
       return;
     }
 
-    // ۲. بررسی صحت کد ملی
-    if (!isValidNationalCode(formData.NationalCode)) {
-      setError('کد ملی وارد شده معتبر نیست');
+    // ✅ کد ملی: 10 رقم + چک‌سام
+    if (!isValidIranianNationalCode(normalizedNationalCode)) {
+      setError('کد ملی وارد شده معتبر نیست. لطفاً کد ملی صحیح ۱۰ رقمی وارد کنید.');
       return;
     }
 
-    // ۳. بررسی شماره موبایل (باید دقیقا ۱۱ رقم باشد و با ۰۹ شروع شود)
-    if (!/^09\d{9}$/.test(formData.PhoneNumber)) {
-      setError('شماره موبایل معتبر نیست (مثال: 09123456789)');
+    // خواسته شرکت: شماره 10 رقم و شروع با 9
+    if (!/^9\d{9}$/.test(normalizedPhone)) {
+      setError('شماره باید ۱۰ رقم باشد و با ۹ شروع شود (مثال: 9151234567)');
       return;
     }
 
     setLoading(true);
 
-    try {
-      // ساخت پلود ارسالی به سرور (ترکیب منطق هر دو نسخه)
-      const payload = {
-        PhoneNumber: formData.PhoneNumber,
-        NationalCode: formData.NationalCode,
-        Type: formData.ActivityType === 'seller' ? 1 : 2 // طبق استاندارد جدید پنل
-      };
+    // قبل ارسال: 0 اضافه شود => 09...
+    const formattedMobile = '0' + normalizedPhone;
 
-      // ارسال درخواست به API
-      const response = await api.post('/b2b/Customer/SignUp', payload);
-      
-      // ذخیره شماره برای استفاده در صفحه تایید
-      localStorage.setItem('tempPhone', formData.PhoneNumber);
+    try {
+      // برای VerifyPage (خیلی مهم برای Resend ثبت‌نام)
+      localStorage.setItem('tempMobile', formattedMobile);
+      localStorage.setItem('verifyMode', 'signup');
+      localStorage.setItem('tempNationalCode', normalizedNationalCode);
+      localStorage.setItem('tempType', String(type));
+
+      // طبق Postman: /api/b2b/Customer/SignUp
+      await api.post('/b2b/Customer/SignUp', {
+        PhoneNumber: formattedMobile,
+        NationalCode: normalizedNationalCode,
+        Type: Number(type), // 0 یا 1
+      });
+
       navigate('/verify');
-      
     } catch (err) {
-      console.error("Registration Error:", err);
-      
-      // مدیریت هوشمند پیام خطا (بسیار مهم برای عیب‌یابی)
-      if (err.response) {
-        // سرور پاسخ داده اما با خطا
-        const serverMsg = err.response.data?.Message || err.response.data?.message;
-        setError(serverMsg || "اطلاعات وارد شده مورد تایید سرور نیست");
-      } else if (err.request) {
-        // عدم دریافت پاسخ از سرور (مشکل اتصال یا پورت)
-        setError("خطا در اتصال به سرور؛ لطفاً وضعیت اینترنت یا پورت ۴۰۰۱ را بررسی کنید");
-      } else {
-        setError("خطایی در تنظیمات درخواست رخ داد");
-      }
+      const msg = err.response?.data?.message || '';
+      const errors = err.response?.data?.errors || [];
+      const combined = [msg, ...errors].filter(Boolean).join(' - ');
+      setError(combined || 'ثبت‌نام/ارسال کد با خطا مواجه شد.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="register-container" style={{ direction: 'rtl', fontFamily: 'Tahoma' }}>
+    <div className="register-container">
       <div className="register-card">
-        <div className="logo-container">
-          <img src={logoRazy} alt="رازی" className="logo-img" />
-        </div>
-        <h2 className="register-title">ثبت‌نام</h2>
-        
+        <img src={logoRazy} alt="رازی" className="logo-img" />
+
+        <h2 className="register-title">ثبت نام</h2>
+
         <form onSubmit={handleRegister}>
-          {/* ۱. انتخاب نوع فعالیت */}
+          {/* نوع کاربر */}
           <div className="input-group">
-            <label className="register-label">نوع فعالیت</label>
-            <select 
+            <label className="register-label">نوع کاربر</label>
+            <select
               className="register-select"
-              value={formData.ActivityType}
-              onChange={(e) => setFormData({...formData, ActivityType: e.target.value})}
+              value={type}
+              onChange={(e) => setType(e.target.value)}
             >
-              <option value="">انتخاب کنید...</option>
-              <option value="seller">فروشنده هستم</option>
-              <option value="supplier">تامین کننده هستم</option>
+              <option value="" disabled>انتخاب کنید</option>
+              <option value="0">فروشنده</option>
+              <option value="1">تامین کننده</option>
             </select>
           </div>
 
-          {/* ۲. وارد کردن کد ملی */}
+          {/* کد ملی */}
           <div className="input-group">
             <label className="register-label">کد ملی</label>
-            <input 
-              type="text" 
-              maxLength="10"
+            <input
+              type="text"
               className="register-custom-input"
-              placeholder="مثال: 3861147904"
-              value={formData.NationalCode}
+              placeholder="مثلاً 3861147904"
+              maxLength="10"
+              value={nationalCode}
               onChange={(e) => {
-                const val = e.target.value.replace(/[^0-9]/g, '');
-                setFormData({...formData, NationalCode: val});
+                // ✅ فقط عدد (فارسی/انگلیسی) + نهایتاً 10 رقم
+                const cleaned = normalizeNumber(e.target.value).slice(0, 10);
+                setNationalCode(cleaned);
               }}
             />
           </div>
 
-          {/* ۳. وارد کردن شماره همراه */}
+          {/* شماره همراه */}
           <div className="input-group">
             <label className="register-label">شماره همراه</label>
-            <div className="phone-input-container" style={{ display: 'flex', alignItems: 'center' }}>
-              <div className="country-code" style={{ padding: '0 10px', color: '#64748b' }}>+۹۸</div>
-              <input 
-                type="text" 
-                maxLength="11"
+            <div className="phone-input-container">
+              <div className="country-code">+۹۸</div>
+              <input
+                type="text"
+                maxLength="10"
                 className="phone-input"
-                style={{ flexGrow: 1, textAlign: 'left', direction: 'ltr' }}
-                placeholder="09123456789"
-                value={formData.PhoneNumber}
-                onChange={(e) => {
-                  const val = e.target.value.replace(/[^0-9]/g, '');
-                  setFormData({...formData, PhoneNumber: val});
-                }}
+                placeholder="9123456789"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </div>
+            <div className="error-text-small" style={{ visibility: 'hidden' }}>.</div>
           </div>
 
-          {error && (
-            <div style={{ backgroundColor: '#fef2f2', color: '#ef4444', padding: '10px', borderRadius: '8px', fontSize: '12px', marginBottom: '15px', textAlign: 'center' }}>
-              {error}
-            </div>
-          )}
+          {error && <p className="error-text-small">{error}</p>}
 
-          <button type="submit" className="main-button" disabled={loading} style={{ width: '100%', cursor: loading ? 'not-allowed' : 'pointer' }}>
-            {loading ? 'در حال پردازش...' : 'تایید و دریافت کد'}
+          <button type="submit" className="main-button" disabled={loading}>
+            {loading ? 'در حال ارسال...' : 'ارسال کد تایید'}
           </button>
         </form>
 
-        <p className="footer-text" style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px' }}>
-          قبلاً ثبت‌نام کرده‌اید؟ 
-          <span onClick={() => navigate('/login')} className="link-text" style={{ color: '#f97316', cursor: 'pointer', fontWeight: 'bold', marginRight: '5px' }}> ورود</span>
+        <p className="footer-text">
+          قبلاً ثبت‌نام کرده‌اید؟
+          <span className="link-text" onClick={() => navigate('/login')}>
+            ورود
+          </span>
         </p>
       </div>
     </div>

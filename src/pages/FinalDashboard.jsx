@@ -1,8 +1,27 @@
 import { Bell, ChevronDown, ChevronLeft, MessageSquare, Search, Settings, Users } from 'lucide-react';
-
-import React from 'react';
+import React, { useEffect, useState } from 'react'; // اضافه کردن هوک‌ها
 
 const FinalDashboard = () => {
+  // انتقال هوک‌ها به داخل کامپوننت برای اجرای صحیح
+  const [userData, setUserData] = useState({ fullName: '', mobile: '', avatar: '' });
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        setUserData({
+          fullName: parsed.FullName || parsed.fullName || 'کاربر سیستم',
+          mobile: parsed.Mobile || parsed.mobile || '',
+          // استفاده از آواتار واقعی یا پیش‌فرض
+          avatar: parsed.Avatar || parsed.avatar || 'https://via.placeholder.com/100'
+        });
+      } catch (e) {
+        console.error("خطا در خواندن اطلاعات کاربر");
+      }
+    }
+  }, []);
+
   return (
     <div style={s.wrapper}>
       {/* Header */}
@@ -10,11 +29,12 @@ const FinalDashboard = () => {
         <div style={s.headerLeft}>
           <ChevronDown size={14} color="#666" />
           <div style={s.userInfo}>
-            <span style={s.userName}>سارا محمدی</span>
-            <span style={s.userPhone}>۰۹۹۲۸۷۸۴۸۴۶</span>
+            <span style={s.userName}>{userData.fullName}</span>
+            <span style={s.userPhone}>{userData.mobile}</span>
           </div>
           <div style={s.avatarCircle}>
-            <img src="https://i.pravatar.cc/100?u=sara" style={s.img} alt="user" />
+            {/* نمایش تصویر واقعی کاربر به جای تصویر سارا */}
+            <img src={userData.avatar} style={s.img} alt="user" />
             <div style={s.onlineDot}></div>
           </div>
           <Bell size={20} color="#666" style={{marginLeft: '15px'}} />
@@ -38,7 +58,7 @@ const FinalDashboard = () => {
         <main style={s.main}>
           <div style={s.alert}>
             <div style={s.alertIcon}>!</div>
-            یه پیام طولانی قابل استفاده برای اعلان اطلاعیه در داشبورد
+            خوش آمدید! این پنل مدیریت فروشگاه‌های شماست.
           </div>
 
           <div style={s.card}>
@@ -79,13 +99,13 @@ const FinalDashboard = () => {
         {/* Sidebar */}
         <aside style={s.sidebar}>
           <div style={{textAlign:'right', marginBottom:'30px'}}>
-             <img src="https://cdn-icons-png.flaticon.com/512/5968/5968204.png" width="35" alt="logo" />
+              <img src="https://cdn-icons-png.flaticon.com/512/5968/5968204.png" width="35" alt="logo" />
           </div>
           
           <div style={s.sideSearch}>
-             <span style={s.sideCmd}>⌘ F</span>
-             <input type="text" placeholder="جستجو" style={s.input} />
-             <Search size={14} color="#ccc" />
+              <span style={s.sideCmd}>⌘ F</span>
+              <input type="text" placeholder="جستجو" style={s.input} />
+              <Search size={14} color="#ccc" />
           </div>
 
           <div style={s.menu}>
@@ -118,10 +138,11 @@ const FinalDashboard = () => {
             <div style={s.profileCombo}>
               <ChevronDown size={14} color="#ccc" />
               <div style={s.supText}>
-                <div style={{fontWeight:'bold'}}>پوشاک سارا</div>
-                <div style={{fontSize:'10px', color:'#aaa'}}>تامین کننده</div>
+                {/* حذف نام سارا و نمایش نام واقعی فروشگاه کاربر */}
+                <div style={{fontWeight:'bold'}}>{userData.fullName}</div>
+                <div style={{fontSize:'10px', color:'#aaa'}}>پروفایل کاربری</div>
               </div>
-              <img src="https://i.pravatar.cc/100?u=shop" style={s.shopImg} alt="shop" />
+              <img src={userData.avatar} style={s.shopImg} alt="shop" />
             </div>
           </div>
         </aside>
@@ -130,7 +151,7 @@ const FinalDashboard = () => {
   );
 };
 
-// استایل‌های آبجکتی برای جلوگیری از تداخل
+// استایل‌ها (بدون تغییر برای حفظ ظاهر)
 const s = {
   wrapper: { height: '100vh', display: 'flex', flexDirection: 'column', background: '#fff', fontFamily: 'inherit', overflow: 'hidden' },
   header: { height: '70px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 40px', borderBottom: '1px solid #f5f5f5', direction: 'ltr' },
