@@ -1,40 +1,44 @@
-<<<<<<< HEAD
- پروژه مدیریت انبار رازی (Stock Management Page)
-این پروژه پیاده‌سازی صفحه مدیریت موجودی کالاها برای پنل B2B رازی است که با استفاده از React.js توسعه یافته است.
+# پنل B2B رازی – مدیریت موجودی انبار (React + Vite)
 
-قابلیت‌های کلیدی:
-طراحی پیکسل‌به‌پیکسل: پیاده‌سازی دقیق چیدمان (Layout) بر اساس فایل فیگما.
+این پروژه بخشی از پنل B2B شرکت رازی است که با **React + Vite** پیاده‌سازی شده و تمرکز اصلی آن روی **صفحه مدیریت موجودی کالاها (Stock Page)** و یک **جریان احراز هویت OTP (ثبت‌نام/ورود + تایید کد)** است.
 
-جستجوی آنی (Real-time Search): قابلیت فیلتر کردن کالاها بر اساس نام به محض تایپ در نوار جستجو.
+---
 
-مدیریت وضعیت موجودی: نمایش وضعیت "تمام شد" با استایل متمایز (رنگ قرمز) برای کالاهای با موجودی صفر.
+## ✨ قابلیت‌های کلیدی
 
-کاملاً واکنش‌گرا (Responsive): رعایت ساختار RTL و چیدمان منعطف.
+### ✅ مدیریت موجودی انبار (Stock Management)
+- **پیاده‌سازی پیکسل‌به‌پیکسل** مطابق فایل فیگما
+- **جستجوی آنی (Real-time Search)** روی نام کالا / نام کامل / بارکد
+- **نمایش وضعیت موجودی**
+  - موجودی صفر → نمایش «ناموجود» با استایل متمایز
+  - موجودی مثبت → نمایش تعداد موجودی
+- **پشتیبانی از RTL** و چیدمان مناسب رابط کاربری
 
-تکنولوژی‌های استفاده شده:
-React: برای ساخت کامپوننت‌ها و مدیریت State.
+### ✅ احراز هویت با OTP
+- ورود با شماره موبایل و ارسال کد (SignIn)
+- ثبت‌نام با شماره موبایل + کدملی + نوع کاربر (SignUp)
+- تایید کد یکبار مصرف (VerifySignIn)
+- ذخیره توکن و ارسال آن در هدر `AppToken` برای درخواست‌های بعدی
 
-React Icons: برای استفاده از آیکون‌های استاندارد سیستم (Feather Icons).
+---
 
-CSS-in-JS (Objects): برای استایل‌دهی یکپارچه و سریع.
+## 🧩 تکنولوژی‌ها
+- **React** (Hooks, Components)
+- **Vite** (Dev Server, Build)
+- **Axios** (API Client + Interceptor برای Token)
+- **lucide-react** (آیکون‌ها)
+- **CSS** (استایل‌دهی صفحات + RTL)
 
-پیش‌نمایش چیدمان:
-ساختار هدر شامل باکس جستجوی مرکزی، پروفایل  در سمت چپ و سایدبار ناوبری در سمت راست است.
-=======
-# React + Vite
+---
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 پیش‌نیازها
+- Node.js نسخه 18 یا بالاتر پیشنهاد می‌شود
+- npm یا yarn
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 راه‌اندازی پروژه
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
->>>>>>> 5cb3420 (Refactor: separate CSS from JSX for cleaner code)
+### 1) نصب وابستگی‌ها
+```bash
+npm install

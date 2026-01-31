@@ -18,7 +18,7 @@ const LoginPage = () => {
   setError('');
 
   if (!/^9\d{9}$/.test(phoneNumber)) {
-    setError("شماره باید ۱۰ رقم باشد و با ۹ شروع شود (مثال: 9151234567)");
+    setError("شماره باید ۱۰ رقم باشد و با ۹ شروع شود (مثال: 9121234567)");
     setLoading(false);
     return;
   }
