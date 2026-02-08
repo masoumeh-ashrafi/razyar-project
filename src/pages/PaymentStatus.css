@@ -1,0 +1,98 @@
+.status-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f7fa;
+  font-family: 'Vazir', sans-serif;
+  direction: rtl;
+  padding: 20px;
+}
+
+.status-card {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.status-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 40px;
+}
+
+/* رنگ‌بندی موفقیت */
+.success .status-icon { background: #dcfce7; color: #16a34a; }
+.success .status-title { color: #16a34a; }
+
+/* رنگ‌بندی خطا */
+.failed .status-icon { background: #fee2e2; color: #dc2626; }
+.failed .status-title { color: #dc2626; }
+
+.status-title {
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+.status-desc {
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.info-box {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: right;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.info-item:last-child { margin-bottom: 0; }
+
+.info-label { color: #94a3b8; }
+.info-value { color: #1e293b; font-weight: bold; }
+
+.status-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn-main {
+  background: #ff7e21; /* نارنجی رازی سافت */
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-main:hover { background: #e66d1a; }
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-weight: bold;
+}
